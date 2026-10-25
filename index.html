@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Коалиция на 61</title>
+<title>Выборы-Выборы, ...</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,7 +60,6 @@ h1{font:700 clamp(1.25rem,5vw,2rem)/1.1 var(--display)}
 .tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .meta{font-size:.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;flex:none}
 .meta strong{color:var(--ink);font-weight:600}
-.meta .note{display:none}
 .link{font:inherit;color:var(--focus);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 
 .stage{
@@ -189,7 +188,7 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
   header{grid-area:h} .tabs{grid-area:t} .meta{grid-area:m} .stage{grid-area:s;min-height:0}
   .board{grid-area:b;gap:10px}
   .lede{display:block}
-  .meta .note{display:block;flex-basis:100%;max-width:68ch}
+  .tabs{flex-wrap:wrap}
   .legend{display:flex}
   .verdict{font-size:.92rem;padding:10px 12px}
   .zone{padding:12px;gap:8px}
@@ -216,13 +215,13 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
 
 <div class="wrap">
   <header>
-    <h1>Коалиция на 61</h1>
+    <h1>Выборы-Выборы, ...</h1>
     <div class="eyebrow">Кнессет 26 · выборы 27.10.2026</div>
     <p class="lede">Перетащите партии в корзины и выберите опрос. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
   </header>
 
   <div class="tabs" role="group" aria-label="Источник опроса" id="tabs"></div>
-  <p class="meta"><span id="meta"></span><button class="link" id="info-btn" type="button">Как играть и источники</button><span class="note" id="note"></span></p>
+  <p class="meta"><span id="meta"></span><button class="link" id="info-btn" type="button">Как играть и источники</button></p>
 
   <div class="stage">
     <svg id="hemi" viewBox="0 0 400 212" role="img" aria-label="Кнессет: 120 мест, окрашенных по корзинам">
@@ -268,13 +267,10 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
   <h2>Как играть</h2>
   <p>Перетащите партию в корзину, нажмите на неё (она перейдёт в следующую корзину) или используйте стрелки ←, →, ↓. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
   <p>«Не распределены»: арабские партии и альянс Хенделя. В опросах их считают отдельно от двух блоков.</p>
-  <h2>Этот опрос</h2>
-  <p id="info-note"></p>
-  <h2>Оговорки и источники</h2>
-  <p>≈ означает, что число восстановлено по опубликованным суммам блоков и может отличаться от настоящего. Для простоты считается 61 из 120 без пересчёта голосов партий, не прошедших порог 3,25%. Опросы не являются прогнозом.</p>
-  <p>Источники:
-    <a href="https://www.israelnationalnews.com/news/435074" target="_blank" rel="noopener">финальные опросы (INN)</a>,
-    <a href="https://www.haaretz.com/israel-news/elections/2026-10-22/ty-article/new-polls-show-eisenkot-bloc-leading-netanyahus-but-short-of-majority/000001a1-61de-d3a9-a9bb-69ff31b00000" target="_blank" rel="noopener">Haaretz, 22.10</a>,
+  <h2>Источники</h2>
+  <p>Последний опрос каждого издания перед запретом на публикацию 23.10.
+    <a href="https://www.timesofisrael.com/final-polls-before-election-show-both-blocs-short-of-majority-small-parties-out-of-knesset/" target="_blank" rel="noopener">The Times of Israel, 23.10</a>,
+    <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election" target="_blank" rel="noopener">сводная таблица опросов (Википедия)</a>,
     <a href="https://themedialine.org/top-stories/israels-election-the-polls-are-split-and-so-is-the-press/" target="_blank" rel="noopener">The Media Line</a>.</p>
   <p class="credits">Фото: Wikimedia Commons, обрезаны и уменьшены.
     <a href="https://commons.wikimedia.org/wiki/File:Yair_Golan_(SHL_9404).jpg" target="_blank" rel="noopener">Голан</a> (Shlomi Amsalem, CC BY-SA 4.0);
@@ -314,33 +310,46 @@ var BYID = {};
 PARTIES.forEach(function(p){ BYID[p.id] = p; });
 var CANON = PARTIES.map(function(p){ return p.id; });
 
+/* Last published poll of each outlet before the 23.10 publication ban. Parties below the 3.25% threshold get 0. */
 var SOURCES = {
   kan: {
-    label:'Кан 11', date:'23.10',
-    note:'Финальный опрос. Известны Яшар, Ликуд и «Вместе», а также блоки: 52 у Айзенкота и 50 у Нетаньяху. Остальное восстановлено по этим суммам.',
-    seats:{yashar:22,likud:20,together:14,democrats:8,yb:8,shas:8,utj:8,otzma:8,rz:6,jl:8,raam:6,hendel:4},
-    exact:['yashar','likud','together']
+    label:'Кан 11', date:'23.10', by:'Kantar', n:1106,
+    seats:{yashar:22,likud:20,together:14,democrats:8,yb:8,shas:7,utj:8,otzma:8,rz:7,jl:9,raam:5,hendel:4}
   },
   ch12: {
-    label:'Канал 12', date:'23.10',
-    note:'Финальный опрос. Известны три первые партии и блоки: 56 у оппозиции, 50 у коалиции, 14 у арабских партий. Остальное восстановлено по суммам. Отдельной строки для Хенделя не нашёл, в сумме блоков для него места нет, поэтому стоит 0.',
-    seats:{yashar:23,likud:21,together:15,democrats:10,yb:8,shas:8,utj:7,otzma:8,rz:6,jl:9,raam:5,hendel:0},
-    exact:['yashar','likud','together']
+    label:'Канал 12', date:'22–23.10', by:'Мидгам', n:1018,
+    seats:{yashar:23,likud:21,together:15,democrats:10,yb:8,shas:8,utj:7,otzma:8,rz:6,jl:9,raam:5,hendel:0}
   },
   ch13: {
-    label:'Канал 13', date:'22.10',
-    note:'Опрос от 22.10 (блоки 52 и 49). В финальном опросе 23.10 Яшар 22, Ликуд 19, «Вместе» 14, но полной разбивки я не нашёл, поэтому взят предыдущий. Точно известны Яшар, Ликуд, «Вместе», «Демократы» и Объединённый список.',
-    seats:{yashar:20,likud:19,together:14,democrats:10,yb:8,shas:8,utj:8,otzma:8,rz:6,jl:9,raam:6,hendel:4},
-    exact:['yashar','likud','together','democrats','jl']
+    label:'Канал 13', date:'23.10', by:'Мадад, Мидгам', n:1875,
+    seats:{yashar:22,likud:19,together:14,democrats:10,yb:8,shas:7,utj:8,otzma:8,rz:8,jl:9,raam:7,hendel:0}
   },
   ch14: {
-    label:'Канал 14', date:'21.10',
-    note:'Канал открыто поддерживает Нетаньяху, опрос делает его бывший советник Шломо Филбер. Известны Ликуд 30, Яшар 20 и блок Нетаньяху 62. Остальное моя оценка.',
-    seats:{yashar:20,likud:30,together:12,democrats:7,yb:7,shas:10,utj:7,otzma:9,rz:6,jl:6,raam:6,hendel:0},
-    exact:['yashar','likud']
+    label:'Канал 14', date:'22.10', by:'Филбер, Next Data', n:7937,
+    seats:{yashar:20,likud:30,together:11,democrats:8,yb:5,shas:9,utj:8,otzma:8,rz:7,jl:8,raam:6,hendel:0}
+  },
+  ih: {
+    label:'Исраэль ха-Йом', date:'22.10', by:'Kantar', n:0,
+    seats:{yashar:23,likud:21,together:14,democrats:8,yb:7,shas:8,utj:7,otzma:8,rz:6,jl:9,raam:5,hendel:4}
+  },
+  zman: {
+    label:'Зман Исраэль', date:'21–22.10', by:'Йоси Татика', n:500,
+    seats:{yashar:23,likud:21,together:11,democrats:8,yb:9,shas:8,utj:8,otzma:8,rz:6,jl:9,raam:5,hendel:4}
+  },
+  maariv: {
+    label:'Маарив', date:'19–22.10', by:'Лазар', n:1048,
+    seats:{yashar:21,likud:19,together:15,democrats:10,yb:8,shas:8,utj:7,otzma:7,rz:7,jl:9,raam:5,hendel:4}
+  },
+  i24: {
+    label:'i24NEWS', date:'20.10', by:'Direct Polls', n:521,
+    seats:{yashar:20,likud:26,together:12,democrats:9,yb:7,shas:8,utj:8,otzma:9,rz:7,jl:8,raam:6,hendel:0}
+  },
+  walla: {
+    label:'Walla', date:'19.10', by:'Лазар', n:601,
+    seats:{yashar:23,likud:19,together:14,democrats:9,yb:8,shas:8,utj:7,otzma:8,rz:6,jl:8,raam:6,hendel:4}
   }
 };
-var ORDER = ['kan','ch12','ch13','ch14'];
+var ORDER = ['kan','ch12','ch13','ch14','ih','zman','maariv','i24','walla'];
 var ZN = {a:'Блок Нетаньяху', b:'Блок Айзенкота', p:'Не распределены'};
 
 var src = 'ch12';
@@ -396,13 +405,12 @@ function paintSeats(S){
 /* ---------- render ---------- */
 function chipHTML(id, z, n, S){
   var p = BYID[id];
-  var est = S.exact.indexOf(id) < 0;
   var title = n === 0 ? ' title="В этом опросе партия не проходит порог"' : '';
   return '<button type="button" class="chip in-' + z + (n === 0 ? ' zero' : '') + '" data-id="' + id + '"' + title +
     ' aria-label="' + p.name + ', ' + n + ' мандатов, сейчас: ' + ZN[z] + '">' +
     '<span class="faces">' + p.img.map(function(f){ return '<img src="img/' + f + '.jpg" alt="" draggable="false" width="48" height="48">'; }).join('') + '</span>' +
     '<span class="t">' + p.name + (p.sub ? '<small>' + p.sub + '</small>' : '') + '</span>' +
-    '<span class="n">' + (est ? '<em>≈</em>' : '') + n + '</span></button>';
+    '<span class="n">' + n + '</span></button>';
 }
 
 function render(){
@@ -462,12 +470,9 @@ function renderSource(){
   Array.prototype.forEach.call($('tabs').children, function(b){
     b.setAttribute('aria-pressed', b.dataset.src === src ? 'true' : 'false');
   });
-  $('meta').innerHTML = '<strong></strong> · ' + S.date;
+  $('meta').innerHTML = '<strong></strong> · ' + S.date + ' · ';
   $('meta').firstChild.textContent = S.label;
-  $('note').textContent = S.note;
-  $('info-note').innerHTML = '<strong></strong> · ' + S.date + '. ';
-  $('info-note').firstChild.textContent = S.label;
-  $('info-note').appendChild(document.createTextNode(S.note));
+  $('meta').appendChild(document.createTextNode(S.by + (S.n ? ', опрошено ' + S.n : '')));
   render();
 }
 
