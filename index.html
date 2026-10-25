@@ -1,0 +1,478 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Коалиция на 61</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Onest:wght@400;500;600&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one column up to 760px. Hemicycle of 120 seats on top, two basket panels side by side, tray of unassigned parties below. */
+:root{
+  --bg:#ECEFF3; --panel:#FFFFFF; --ink:#12161C; --muted:#566070; --line:#D0D6DE;
+  --a:#1B4DDB; --a-soft:#DCE5FF;
+  --b:#D9560B; --b-soft:#FFE4D2;
+  --pool:#8F99A8; --pool-soft:#E4E8EE;
+  --focus:#1B4DDB;
+  --display:'Unbounded','Arial Black',system-ui,sans-serif;
+  --body:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1217; --panel:#171C24; --ink:#E9EDF3; --muted:#9BA6B5; --line:#2B3440;
+    --a:#7F9CFF; --a-soft:#1C2858; --b:#FF9550; --b-soft:#4B2A13;
+    --pool:#6F7A8A; --pool-soft:#202833; --focus:#9DB3FF;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1217; --panel:#171C24; --ink:#E9EDF3; --muted:#9BA6B5; --line:#2B3440;
+  --a:#7F9CFF; --a-soft:#1C2858; --b:#FF9550; --b-soft:#4B2A13;
+  --pool:#6F7A8A; --pool-soft:#202833; --focus:#9DB3FF;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font:400 15px/1.45 var(--body);
+  padding-block:22px 44px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1,h2,p{margin:0}
+.eyebrow{font:500 .72rem/1 var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(1.45rem,5.6vw,2.3rem)/1.1 var(--display);text-wrap:balance;margin-top:8px}
+.lede{color:var(--muted);max-width:60ch;margin-top:8px;text-wrap:pretty}
+
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tab{
+  font:500 .86rem/1 var(--body);padding:9px 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;
+}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.meta{font-size:.8rem;color:var(--muted);max-width:68ch}
+.meta strong{color:var(--ink);font-weight:600}
+
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 12px 10px}
+.stage svg{display:block;width:100%;height:auto}
+.seat{fill:#888;transition:fill .35s,fill-opacity .35s}
+.s-a{fill:var(--a)} .s-b{fill:var(--b)} .s-p{fill:var(--pool)}
+.seat.alt{fill-opacity:.58}
+.big{font:700 34px var(--display);fill:var(--ink);text-anchor:middle}
+.sm{font:400 11px var(--body);fill:var(--muted);text-anchor:middle}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;font-size:.78rem;color:var(--muted);margin-top:4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+.verdict{
+  border:1px solid var(--line);background:var(--panel);border-radius:12px;
+  padding:12px 14px;font-weight:500;text-wrap:pretty;
+}
+.verdict.win-a{border-color:var(--a);background:var(--a-soft)}
+.verdict.win-b{border-color:var(--b);background:var(--b-soft)}
+
+.board{display:flex;flex-direction:column;gap:10px}
+.baskets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.zone{
+  min-width:0;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:12px;
+  display:flex;flex-direction:column;gap:10px;transition:border-color .2s,background .2s;
+}
+.zone h2{font:600 .88rem/1.2 var(--body)}
+.count{display:flex;align-items:baseline;gap:6px}
+.count b{font:700 1.9rem/1 var(--display);font-variant-numeric:tabular-nums}
+.count span{font:500 .85rem var(--mono);color:var(--muted)}
+.zone-a .count b{color:var(--a)}
+.zone-b .count b{color:var(--b)}
+.bar{height:8px;border-radius:99px;background:var(--pool-soft);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .4s}
+.zone-a .bar i{background:var(--a)} .zone-b .bar i{background:var(--b)}
+.stat{font-size:.78rem;color:var(--muted);min-height:1.2em}
+.zone.won{border-color:var(--ink)}
+.zone-a.won{border-color:var(--a)} .zone-b.won{border-color:var(--b)}
+.zone-a.over{border-color:var(--a);background:var(--a-soft)}
+.zone-b.over{border-color:var(--b);background:var(--b-soft)}
+.zone-p.over{border-color:var(--pool);background:var(--pool-soft)}
+.list{display:flex;flex-direction:column;gap:6px;min-height:84px}
+.list:empty::before{content:"Перетащите партию сюда";color:var(--muted);font-size:.8rem;padding:8px 2px}
+.zone-p{border-style:dashed}
+.zone-p .phead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline}
+.zone-p .psub{font-size:.78rem;color:var(--muted);max-width:56ch}
+.zone-p .list{flex-direction:row;flex-wrap:wrap;min-height:56px}
+
+.chip{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+  text-align:left;padding:8px 10px;border-radius:10px;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font:500 .84rem/1.2 var(--body);
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+.chip .t{min-width:0}
+.chip small{display:block;font-size:.72rem;font-weight:400;opacity:.72;margin-top:1px}
+.chip .n{font:600 1rem/1 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip .n em{font-style:normal;font-weight:500;font-size:.72rem;opacity:.6;margin-right:1px}
+.chip.in-a{background:var(--a-soft);border-color:var(--a)}
+.chip.in-b{background:var(--b-soft);border-color:var(--b)}
+.chip.in-p{background:var(--pool-soft);border-color:var(--pool)}
+.zone-p .chip{width:auto;flex:1 1 150px}
+.chip.zero{opacity:.55;border-style:dashed}
+.chip.lifted{opacity:.3}
+.chip.ghost{
+  position:fixed;z-index:50;pointer-events:none;opacity:.96;margin:0;
+  box-shadow:0 10px 28px rgba(0,0,0,.28);transform:scale(1.04) rotate(-1.5deg);
+}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ghostbtn{
+  font:500 .82rem/1 var(--body);padding:9px 13px;border-radius:10px;
+  border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;
+}
+.hint{font-size:.78rem;color:var(--muted);flex:1 1 220px}
+.foot{font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;gap:6px;max-width:70ch}
+.foot a{color:inherit;text-underline-offset:2px}
+
+@media (max-width:420px){ .zone{padding:10px} .count b{font-size:1.65rem} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Кнессет 26 · выборы 27 октября 2026</div>
+    <h1>Коалиция на 61</h1>
+    <p class="lede">Перетащите партии в корзины и выберите опрос. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
+  </header>
+
+  <div class="tabs" role="group" aria-label="Источник опроса" id="tabs"></div>
+  <p class="meta" id="meta"></p>
+
+  <div class="stage">
+    <svg id="hemi" viewBox="0 0 400 212" role="img" aria-label="Кнессет: 120 мест, окрашенных по корзинам">
+      <text class="big" x="200" y="172">61</text>
+      <text class="sm" x="200" y="192">нужно из 120</text>
+    </svg>
+    <div class="legend">
+      <span><i style="background:var(--b)"></i>Блок Айзенкота</span>
+      <span><i style="background:var(--pool)"></i>Не распределены</span>
+      <span><i style="background:var(--a)"></i>Блок Нетаньяху</span>
+    </div>
+  </div>
+
+  <div class="verdict" id="verdict" role="status" aria-live="polite"></div>
+
+  <div class="board" id="board">
+    <div class="baskets">
+      <section class="zone zone-b" data-zone="b" aria-label="Блок Айзенкота">
+        <h2>Блок Айзенкота</h2>
+        <div class="count"><b id="cnt-b">0</b><span>/ 61</span></div>
+        <div class="bar"><i id="bar-b"></i></div>
+        <p class="stat" id="stat-b"></p>
+        <div class="list" id="list-b"></div>
+      </section>
+      <section class="zone zone-a" data-zone="a" aria-label="Блок Нетаньяху">
+        <h2>Блок Нетаньяху</h2>
+        <div class="count"><b id="cnt-a">0</b><span>/ 61</span></div>
+        <div class="bar"><i id="bar-a"></i></div>
+        <p class="stat" id="stat-a"></p>
+        <div class="list" id="list-a"></div>
+      </section>
+    </div>
+    <section class="zone zone-p" data-zone="p" aria-label="Не распределены">
+      <div class="phead">
+        <h2>Не распределены · <span id="pool-sum">0</span></h2>
+        <p class="psub">Арабские партии и альянс Хенделя: в опросах их считают отдельно от двух блоков.</p>
+      </div>
+      <div class="list" id="list-p"></div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <button class="ghostbtn" id="reset" type="button">Как в опросе</button>
+    <button class="ghostbtn" id="clear" type="button">Все в «не распределены»</button>
+    <p class="hint">Перетащите партию, нажмите на неё (она перейдёт в следующую корзину) или используйте стрелки ←, →, ↓.</p>
+  </div>
+
+  <div class="foot">
+    <p>≈ означает, что число восстановлено по опубликованным суммам блоков и может отличаться от настоящего. Для простоты считается 61 из 120 без пересчёта голосов партий, не прошедших порог 3,25%. Опросы не являются прогнозом.</p>
+    <p>Источники:
+      <a href="https://www.israelnationalnews.com/news/435074" target="_blank" rel="noopener">финальные опросы (INN)</a>,
+      <a href="https://www.haaretz.com/israel-news/elections/2026-10-22/ty-article/new-polls-show-eisenkot-bloc-leading-netanyahus-but-short-of-majority/000001a1-61de-d3a9-a9bb-69ff31b00000" target="_blank" rel="noopener">Haaretz, 22.10</a>,
+      <a href="https://themedialine.org/top-stories/israels-election-the-polls-are-split-and-so-is-the-press/" target="_blank" rel="noopener">The Media Line</a>.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var PARTIES = [
+  {id:'democrats', name:'Демократы', sub:'Голан', def:'b'},
+  {id:'yashar',    name:'Яшар', sub:'Айзенкот', def:'b'},
+  {id:'together',  name:'Вместе', sub:'Беннет, Лапид', def:'b'},
+  {id:'yb',        name:'Ецзраэль Бейтену', sub:'Либерман', def:'b'},
+  {id:'jl',        name:'Объединённый список', sub:'арабские партии', def:'p'},
+  {id:'raam',      name:'Раам', sub:'арабская партия', def:'p'},
+  {id:'hendel',    name:'Хендель и Зелеха', sub:'Резервисты', def:'p'},
+  {id:'likud',     name:'Ликуд', sub:'Нетаньяху', def:'a'},
+  {id:'shas',      name:'Шас', sub:'', def:'a'},
+  {id:'utj',       name:'ЮТИ', sub:'иудаизм Торы', def:'a'},
+  {id:'otzma',     name:'Оцма Иегудит', sub:'Бен-Гвир', def:'a'},
+  {id:'rz',        name:'Религиозный сионизм', sub:'Смотрич', def:'a'}
+];
+var BYID = {};
+PARTIES.forEach(function(p){ BYID[p.id] = p; });
+var CANON = PARTIES.map(function(p){ return p.id; });
+
+var SOURCES = {
+  kan: {
+    label:'Кан 11', date:'23.10',
+    note:'Финальный опрос. Известны Яшар, Ликуд и «Вместе», а также блоки: 52 у Айзенкота и 50 у Нетаньяху. Остальное восстановлено по этим суммам.',
+    seats:{yashar:22,likud:20,together:14,democrats:8,yb:8,shas:8,utj:8,otzma:8,rz:6,jl:8,raam:6,hendel:4},
+    exact:['yashar','likud','together']
+  },
+  ch12: {
+    label:'Канал 12', date:'23.10',
+    note:'Финальный опрос. Известны три первые партии и блоки: 56 у оппозиции, 50 у коалиции, 14 у арабских партий. Остальное восстановлено по суммам. Отдельной строки для Хенделя не нашёл, в сумме блоков для него места нет, поэтому стоит 0.',
+    seats:{yashar:23,likud:21,together:15,democrats:10,yb:8,shas:8,utj:7,otzma:8,rz:6,jl:9,raam:5,hendel:0},
+    exact:['yashar','likud','together']
+  },
+  ch13: {
+    label:'Канал 13', date:'22.10',
+    note:'Опрос от 22.10 (блоки 52 и 49). В финальном опросе 23.10 Яшар 22, Ликуд 19, «Вместе» 14, но полной разбивки я не нашёл, поэтому взят предыдущий. Точно известны Яшар, Ликуд, «Вместе», «Демократы» и Объединённый список.',
+    seats:{yashar:20,likud:19,together:14,democrats:10,yb:8,shas:8,utj:8,otzma:8,rz:6,jl:9,raam:6,hendel:4},
+    exact:['yashar','likud','together','democrats','jl']
+  },
+  ch14: {
+    label:'Канал 14', date:'21.10',
+    note:'Канал открыто поддерживает Нетаньяху, опрос делает его бывший советник Шломо Филбер. Известны Ликуд 30, Яшар 20 и блок Нетаньяху 62. Остальное моя оценка.',
+    seats:{yashar:20,likud:30,together:12,democrats:7,yb:7,shas:10,utj:7,otzma:9,rz:6,jl:6,raam:6,hendel:0},
+    exact:['yashar','likud']
+  }
+};
+var ORDER = ['kan','ch12','ch13','ch14'];
+var ZN = {a:'Блок Нетаньяху', b:'Блок Айзенкота', p:'Не распределены'};
+
+var src = 'ch12';
+var assign = {};
+function resetAssign(){ PARTIES.forEach(function(p){ assign[p.id] = p.def; }); }
+resetAssign();
+var tot = {a:0,b:0,p:0};
+var lastFocus = null;
+
+function $(id){ return document.getElementById(id); }
+
+/* ---------- hemicycle ---------- */
+var NS = 'http://www.w3.org/2000/svg';
+var ROWS = [[90,13],[110,16],[130,19],[150,21],[170,24],[190,27]];
+var seatPos = [];
+ROWS.forEach(function(row, ri){
+  var r = row[0], n = row[1];
+  for(var j = 0; j < n; j++){
+    var th = Math.PI * (1 - (j + 0.5) / n);
+    seatPos.push({x:200 + r * Math.cos(th), y:200 - r * Math.sin(th), th:th, ri:ri});
+  }
+});
+seatPos.sort(function(p, q){ return (q.th - p.th) || (p.ri - q.ri); });
+var hemi = $('hemi');
+var circles = seatPos.map(function(s){
+  var c = document.createElementNS(NS, 'circle');
+  c.setAttribute('cx', s.x.toFixed(1));
+  c.setAttribute('cy', s.y.toFixed(1));
+  c.setAttribute('r', '7.4');
+  c.setAttribute('class', 'seat s-p');
+  c.appendChild(document.createElementNS(NS, 'title'));
+  hemi.appendChild(c);
+  return c;
+});
+
+function paintSeats(S){
+  var seq = [];
+  ['b','p','a'].forEach(function(z){
+    var k = 0;
+    CANON.filter(function(id){ return assign[id] === z; }).forEach(function(id){
+      var n = S.seats[id];
+      for(var i = 0; i < n; i++) seq.push({z:z, alt:(k % 2 === 1), name:BYID[id].name});
+      if(n > 0) k++;
+    });
+  });
+  circles.forEach(function(c, i){
+    var s = seq[i] || {z:'p', alt:true, name:''};
+    c.setAttribute('class', 'seat s-' + s.z + (s.alt ? ' alt' : ''));
+    c.firstChild.textContent = s.name;
+  });
+}
+
+/* ---------- render ---------- */
+function chipHTML(id, z, n, S){
+  var p = BYID[id];
+  var est = S.exact.indexOf(id) < 0;
+  var title = n === 0 ? ' title="В этом опросе партия не проходит порог"' : '';
+  return '<button type="button" class="chip in-' + z + (n === 0 ? ' zero' : '') + '" data-id="' + id + '"' + title +
+    ' aria-label="' + p.name + ', ' + n + ' мандатов, сейчас: ' + ZN[z] + '">' +
+    '<span class="t">' + p.name + (p.sub ? '<small>' + p.sub + '</small>' : '') + '</span>' +
+    '<span class="n">' + (est ? '<em>≈</em>' : '') + n + '</span></button>';
+}
+
+function render(){
+  var S = SOURCES[src];
+  tot = {a:0,b:0,p:0};
+  var buckets = {a:[], b:[], p:[]};
+  CANON.forEach(function(id){
+    var z = assign[id], n = S.seats[id];
+    tot[z] += n;
+    buckets[z].push(id);
+  });
+  ['a','b','p'].forEach(function(z){
+    buckets[z].sort(function(x, y){ return S.seats[y] - S.seats[x]; });
+    $('list-' + z).innerHTML = buckets[z].map(function(id){ return chipHTML(id, z, S.seats[id], S); }).join('');
+  });
+
+  ['a','b'].forEach(function(z){
+    var n = tot[z];
+    $('cnt-' + z).textContent = n;
+    $('bar-' + z).style.width = Math.min(100, n / 61 * 100) + '%';
+    $('stat-' + z).textContent = n >= 61 ? 'Большинство: ' + n + ' из 120' : 'До 61 не хватает ' + (61 - n);
+    document.querySelector('.zone-' + z).classList.toggle('won', n >= 61);
+  });
+  $('pool-sum').textContent = tot.p + ' ' + plural(tot.p, 'мандат', 'мандата', 'мандатов');
+
+  var v = $('verdict');
+  v.className = 'verdict';
+  if(tot.a >= 61){
+    v.classList.add('win-a');
+    v.textContent = 'Блок Нетаньяху набирает большинство: ' + tot.a + ' из 120.';
+  } else if(tot.b >= 61){
+    v.classList.add('win-b');
+    v.textContent = 'Блок Айзенкота набирает большинство: ' + tot.b + ' из 120.';
+  } else {
+    var t = 'Ни у кого нет 61. У Нетаньяху не хватает ' + (61 - tot.a) + ', у Айзенкота ' + (61 - tot.b) + '.';
+    if(tot.p > 0) t += ' Не распределено: ' + tot.p + '.';
+    v.textContent = t;
+  }
+
+  paintSeats(S);
+
+  if(lastFocus){
+    var el = $('board').querySelector('[data-id="' + lastFocus + '"]');
+    if(el) el.focus();
+    lastFocus = null;
+  }
+}
+
+function plural(n, one, few, many){
+  var m10 = n % 10, m100 = n % 100;
+  if(m10 === 1 && m100 !== 11) return one;
+  if(m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
+}
+
+function renderSource(){
+  var S = SOURCES[src];
+  Array.prototype.forEach.call($('tabs').children, function(b){
+    b.setAttribute('aria-pressed', b.dataset.src === src ? 'true' : 'false');
+  });
+  $('meta').innerHTML = '<strong></strong> · ' + S.date + '. ' + S.note;
+  $('meta').firstChild.textContent = S.label;
+  render();
+}
+
+/* ---------- moves ---------- */
+function move(id, z){
+  if(assign[id] === z) { render(); return; }
+  assign[id] = z;
+  render();
+}
+function cycle(id){
+  var seq = ['a','b','p'];
+  move(id, seq[(seq.indexOf(assign[id]) + 1) % 3]);
+}
+
+/* ---------- source tabs ---------- */
+ORDER.forEach(function(k){
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'tab';
+  b.dataset.src = k;
+  b.textContent = SOURCES[k].label;
+  b.addEventListener('click', function(){ src = k; renderSource(); });
+  $('tabs').appendChild(b);
+});
+$('reset').addEventListener('click', function(){ resetAssign(); render(); });
+$('clear').addEventListener('click', function(){ PARTIES.forEach(function(p){ assign[p.id] = 'p'; }); render(); });
+
+/* ---------- drag and drop (pointer events: mouse, touch, pen) ---------- */
+var board = $('board');
+var drag = null;
+
+function zoneAt(x, y){
+  var el = document.elementFromPoint(x, y);
+  return el ? el.closest('[data-zone]') : null;
+}
+function highlight(z){
+  Array.prototype.forEach.call(board.querySelectorAll('[data-zone]'), function(el){
+    el.classList.toggle('over', el.dataset.zone === z);
+  });
+}
+
+board.addEventListener('pointerdown', function(e){
+  var chip = e.target.closest('.chip');
+  if(!chip) return;
+  if(e.pointerType === 'mouse' && e.button !== 0) return;
+  drag = {chip:chip, id:chip.dataset.id, sx:e.clientX, sy:e.clientY, pid:e.pointerId, active:false, ghost:null, ox:0, oy:0};
+  try { chip.setPointerCapture(e.pointerId); } catch(_) {}
+});
+
+board.addEventListener('pointermove', function(e){
+  if(!drag || e.pointerId !== drag.pid) return;
+  if(!drag.active){
+    if(Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
+    var r = drag.chip.getBoundingClientRect();
+    drag.ox = drag.sx - r.left;
+    drag.oy = drag.sy - r.top;
+    var g = drag.chip.cloneNode(true);
+    g.classList.add('ghost');
+    g.style.width = r.width + 'px';
+    document.body.appendChild(g);
+    drag.ghost = g;
+    drag.chip.classList.add('lifted');
+    drag.active = true;
+  }
+  drag.ghost.style.left = (e.clientX - drag.ox) + 'px';
+  drag.ghost.style.top = (e.clientY - drag.oy) + 'px';
+  var z = zoneAt(e.clientX, e.clientY);
+  highlight(z ? z.dataset.zone : null);
+});
+
+function endDrag(e, cancelled){
+  if(!drag || e.pointerId !== drag.pid) return;
+  var d = drag;
+  drag = null;
+  highlight(null);
+  if(d.ghost) d.ghost.remove();
+  d.chip.classList.remove('lifted');
+  if(cancelled) return;
+  if(d.active){
+    var z = zoneAt(e.clientX, e.clientY);
+    if(z) move(d.id, z.dataset.zone);
+  } else {
+    cycle(d.id);
+  }
+}
+board.addEventListener('pointerup', function(e){ endDrag(e, false); });
+board.addEventListener('pointercancel', function(e){ endDrag(e, true); });
+
+/* keyboard: Enter/Space cycles, arrows send to a basket */
+board.addEventListener('click', function(e){
+  var chip = e.target.closest('.chip');
+  if(chip && e.detail === 0){ lastFocus = chip.dataset.id; cycle(chip.dataset.id); }
+});
+board.addEventListener('keydown', function(e){
+  var chip = e.target.closest('.chip');
+  if(!chip) return;
+  var m = {ArrowLeft:'b', ArrowRight:'a', ArrowDown:'p'}[e.key];
+  if(m){ e.preventDefault(); lastFocus = chip.dataset.id; move(chip.dataset.id, m); }
+});
+
+renderSource();
+})();
+</script>
+
+</body></html>
