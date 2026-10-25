@@ -52,7 +52,17 @@ header{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px}
 h1{font:700 clamp(1.05rem,4.6vw,2rem)/1.1 var(--display);min-width:0}
 .lede{color:var(--muted);max-width:60ch;text-wrap:pretty;flex-basis:100%;display:none;margin-top:4px}
 
-.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:none}
+/* Poll tabs scroll sideways; the edge fades show which side has more (classes set in JS) */
+.tabs{display:flex;gap:6px;flex:none;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:4px}
+.tabs::-webkit-scrollbar{height:4px}
+.tabs::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.tab{flex:none}
+.tabs.fade-e{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent)}
+.tabs.fade-s{-webkit-mask-image:linear-gradient(to right,transparent,#000 36px);mask-image:linear-gradient(to right,transparent,#000 36px)}
+.tabs.fade-s.fade-e{-webkit-mask-image:linear-gradient(to right,transparent,#000 36px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,transparent,#000 36px,#000 calc(100% - 36px),transparent)}
+[dir="rtl"] .tabs.fade-e{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 36px),transparent)}
+[dir="rtl"] .tabs.fade-s{-webkit-mask-image:linear-gradient(to left,transparent,#000 36px);mask-image:linear-gradient(to left,transparent,#000 36px)}
+[dir="rtl"] .tabs.fade-s.fade-e{-webkit-mask-image:linear-gradient(to left,transparent,#000 36px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to left,transparent,#000 36px,#000 calc(100% - 36px),transparent)}
 .tab{
   font:500 .84rem/1 var(--body);padding:8px 12px;border-radius:999px;white-space:nowrap;
   border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;
@@ -173,6 +183,7 @@ dialog.info .credits{font-size:.78rem;margin-top:8px}
 
 /* Narrow phones: squeeze basket chrome so the hemicycle keeps its height */
 @media (max-width:599px){
+  .tab{font-size:.78rem;padding:7px 10px}
   .zone h2{font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .count span{display:none}
   .chip{font-size:.74rem;padding:4px 6px;gap:5px}
@@ -205,9 +216,9 @@ dialog.info .credits{font-size:.78rem;margin-top:8px}
     grid-template-areas:"h b" "t b" "m b" "s b";
   }
   header{grid-area:h} .tabs{grid-area:t} .meta{grid-area:m} .stage{grid-area:s;min-height:0}
+  .tabs,.tabs.fade-s,.tabs.fade-e{flex-wrap:wrap;overflow:visible;padding-bottom:0;-webkit-mask-image:none;mask-image:none}
   .board{grid-area:b;gap:10px}
   .lede{display:block}
-  .tabs{flex-wrap:wrap}
   .legend{display:flex}
   .verdict{font-size:.92rem;padding:10px 12px}
   .zone{padding:12px;gap:8px}
@@ -629,6 +640,8 @@ function applyLang(){
       esc(c[2]) + '</bdi>, <bdi>' + (c[3] === 'PD' ? esc(t('pd')) : c[3]) + '</bdi></li>';
   }).join('');
   renderSource();
+  $('tabs').scrollLeft = 0;
+  tabsFade();
 }
 
 /* ---------- moves ---------- */
@@ -652,9 +665,27 @@ ORDER.forEach(function(k){
   b.type = 'button';
   b.className = 'tab';
   b.dataset.src = k;
-  b.addEventListener('click', function(){ src = k; renderSource(); });
+  b.addEventListener('click', function(){
+    src = k; renderSource();
+    if(b.scrollIntoView) b.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'});
+  });
   $('tabs').appendChild(b);
 });
+/* scrollLeft is negative in RTL, hence Math.abs */
+function tabsFade(){
+  var el = $('tabs'), max = el.scrollWidth - el.clientWidth, x = Math.abs(el.scrollLeft);
+  el.classList.toggle('fade-s', max > 1 && x > 2);
+  el.classList.toggle('fade-e', max > 1 && x < max - 2);
+}
+$('tabs').addEventListener('scroll', tabsFade, {passive:true});
+window.addEventListener('resize', tabsFade);
+/* mouse wheel scrolls the tab row sideways */
+$('tabs').addEventListener('wheel', function(e){
+  var el = this;
+  if(el.scrollWidth <= el.clientWidth || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+  el.scrollLeft += (lang === 'he' ? -1 : 1) * e.deltaY;
+  e.preventDefault();
+}, {passive:false});
 Array.prototype.forEach.call($('lang').children, function(b){
   b.addEventListener('click', function(){
     lang = b.dataset.lang;
