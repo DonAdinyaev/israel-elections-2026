@@ -3,7 +3,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Onest:wght@400;500;600&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Onest:wght@400;500;600&family=Unbounded:wght@500;700&family=Heebo:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
 /* Layout: fits one viewport. Phones: one column, hemicycle on top, baskets side by side, tray below. Wide screens: hemicycle left, baskets right. */
 :root{
@@ -49,7 +49,7 @@ body{
 h1,h2,p{margin:0}
 header{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px}
 .eyebrow{font:500 .7rem/1 var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
-h1{font:700 clamp(1.25rem,5vw,2rem)/1.1 var(--display)}
+h1{font:700 clamp(1.05rem,4.6vw,2rem)/1.1 var(--display);min-width:0}
 .lede{color:var(--muted);max-width:60ch;text-wrap:pretty;flex-basis:100%;display:none;margin-top:4px}
 
 .tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:none}
@@ -104,21 +104,21 @@ h1{font:700 clamp(1.25rem,5vw,2rem)/1.1 var(--display)}
 .zone-b.over{border-color:var(--b);background:var(--b-soft)}
 .zone-p.over{border-color:var(--pool);background:var(--pool-soft)}
 .list{display:flex;flex-direction:column;gap:4px;min-height:60px;flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain}
-.list:empty::before{content:"Перетащите партию сюда";color:var(--muted);font-size:.78rem;padding:6px 2px}
+.list:empty::before{content:attr(data-empty);color:var(--muted);font-size:.78rem;padding:6px 2px}
 .zone-p{border-style:dashed;flex:none}
 .zone-p .phead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;align-items:center}
 .zone-p .list{flex-direction:row;flex-wrap:wrap;min-height:36px;flex:none}
 
 .chip{
   display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;flex:none;
-  text-align:left;padding:6px 8px;border-radius:9px;border:1px solid var(--line);
+  text-align:start;padding:6px 8px;border-radius:9px;border:1px solid var(--line);
   background:var(--panel);color:var(--ink);font:500 .78rem/1.15 var(--body);
   cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 .chip .t{min-width:0;flex:1 1 auto}
 .faces{display:flex;flex:none}
 .faces img{width:22px;height:22px;border-radius:50%;object-fit:cover;display:block;background:var(--pool-soft);border:1.5px solid var(--panel);pointer-events:none}
-.faces img+img{margin-left:-9px}
+.faces img+img{margin-inline-start:-9px}
 .chip small{display:none;font-size:.7rem;font-weight:400;opacity:.72;margin-top:1px}
 .chip .n{font:600 .9rem/1 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
 .chip .n em{font-style:normal;font-weight:500;font-size:.7rem;opacity:.6;margin-right:1px}
@@ -151,6 +151,16 @@ dialog.info p{margin:0 0 10px;color:var(--muted)}
 dialog.info p strong{color:var(--ink)}
 dialog.info a{color:inherit;text-underline-offset:2px}
 dialog.info .close{float:right;margin:-4px -6px 0 8px}
+[dir="rtl"] dialog.info .close{float:left;margin:-4px 8px 0 -6px}
+
+.lang{display:flex;gap:2px;margin-inline-start:auto;align-self:center;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--panel)}
+.lang button{font:600 .66rem/1 var(--body);letter-spacing:.04em;padding:5px 7px;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.eyebrow{flex-basis:100%}
+/* Hebrew: the Latin/Cyrillic display faces have no Hebrew glyphs */
+:root[lang="he"]{--display:'Heebo',system-ui,sans-serif;--body:'Heebo',system-ui,sans-serif}
+:root[lang="he"] h1{font-weight:800;letter-spacing:0}
+:root[lang="he"] .eyebrow{letter-spacing:0}
 
 /* Narrow phones: squeeze basket chrome so the hemicycle keeps its height */
 @media (max-width:599px){
@@ -158,7 +168,7 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
   .count span{display:none}
   .chip{font-size:.74rem;padding:4px 6px;gap:5px}
   .faces img{width:20px;height:20px}
-  .faces img+img{margin-left:-8px}
+  .faces img+img{margin-inline-start:-8px}
   .zone-p .chip{flex-basis:96px}
   .zone-p h2{font-size:.76rem}
   .zone-p .phead{flex-wrap:nowrap}
@@ -173,7 +183,7 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
   .chip{padding:8px 10px;font-size:.84rem}
   .chip small{display:block}
   .faces img{width:30px;height:30px}
-  .faces img+img{margin-left:-12px}
+  .faces img+img{margin-inline-start:-12px}
   .lede{display:block}
   .count b{font-size:1.6rem}
 }
@@ -199,7 +209,7 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
   .chip{padding:8px 10px;font-size:.86rem}
   .chip small{display:block}
   .faces img{width:32px;height:32px}
-  .faces img+img{margin-left:-12px}
+  .faces img+img{margin-inline-start:-12px}
   .chip .n{font-size:1rem}
   .zone-p .chip{flex-basis:160px}
 }
@@ -215,46 +225,49 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
 
 <div class="wrap">
   <header>
-    <h1>Выборы-Выборы, ...</h1>
-    <div class="eyebrow">Кнессет 26 · выборы 27.10.2026</div>
-    <p class="lede">Перетащите партии в корзины и выберите опрос. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
+    <h1 data-i18n="title"></h1>
+    <div class="lang" role="group" id="lang" data-i18n-aria="langAria">
+      <button type="button" data-lang="ru" lang="ru">RU</button><button type="button" data-lang="en" lang="en">EN</button><button type="button" data-lang="he" lang="he">עב</button>
+    </div>
+    <div class="eyebrow" data-i18n="eyebrow"></div>
+    <p class="lede" data-i18n="lede"></p>
   </header>
 
-  <div class="tabs" role="group" aria-label="Источник опроса" id="tabs"></div>
-  <p class="meta"><span id="meta"></span><button class="link" id="info-btn" type="button">Как играть и источники</button></p>
+  <div class="tabs" role="group" data-i18n-aria="tabsAria" id="tabs"></div>
+  <p class="meta"><span id="meta"></span><button class="link" id="info-btn" type="button" data-i18n="info"></button></p>
 
   <div class="stage">
-    <svg id="hemi" viewBox="0 0 400 212" role="img" aria-label="Кнессет: 120 мест, окрашенных по корзинам">
+    <svg id="hemi" viewBox="0 0 400 212" role="img" data-i18n-aria="hemiAria">
       <text class="big" x="200" y="172">61</text>
-      <text class="sm" x="200" y="192">нужно из 120</text>
+      <text class="sm" x="200" y="192" data-i18n="needed"></text>
     </svg>
     <div class="legend">
-      <span><i style="background:var(--b)"></i>Блок Айзенкота</span>
-      <span><i style="background:var(--pool)"></i>Не распределены</span>
-      <span><i style="background:var(--a)"></i>Блок Нетаньяху</span>
+      <span><i style="background:var(--b)"></i><span data-i18n="blocB"></span></span>
+      <span><i style="background:var(--pool)"></i><span data-i18n="pool"></span></span>
+      <span><i style="background:var(--a)"></i><span data-i18n="blocA"></span></span>
     </div>
     <div class="verdict" id="verdict" role="status" aria-live="polite"></div>
   </div>
 
   <div class="board" id="board">
     <div class="baskets">
-      <section class="zone zone-b" data-zone="b" aria-label="Блок Айзенкота">
-        <div class="zhead"><h2>Блок Айзенкота</h2><div class="count"><b id="cnt-b">0</b><span>/ 61</span></div></div>
+      <section class="zone zone-b" data-zone="b" data-i18n-aria="blocB">
+        <div class="zhead"><h2 data-i18n="blocB"></h2><div class="count"><b id="cnt-b">0</b><span>/ 61</span></div></div>
         <div class="bar"><i id="bar-b"></i></div>
         <div class="list" id="list-b"></div>
       </section>
-      <section class="zone zone-a" data-zone="a" aria-label="Блок Нетаньяху">
-        <div class="zhead"><h2>Блок Нетаньяху</h2><div class="count"><b id="cnt-a">0</b><span>/ 61</span></div></div>
+      <section class="zone zone-a" data-zone="a" data-i18n-aria="blocA">
+        <div class="zhead"><h2 data-i18n="blocA"></h2><div class="count"><b id="cnt-a">0</b><span>/ 61</span></div></div>
         <div class="bar"><i id="bar-a"></i></div>
         <div class="list" id="list-a"></div>
       </section>
     </div>
-    <section class="zone zone-p" data-zone="p" aria-label="Не распределены">
+    <section class="zone zone-p" data-zone="p" data-i18n-aria="pool">
       <div class="phead">
-        <h2>Не распределены · <span id="pool-sum">0</span></h2>
+        <h2><span data-i18n="pool"></span> · <span id="pool-sum">0</span></h2>
         <div class="controls">
-          <button class="ghostbtn" id="reset" type="button" title="Как в опросе"><span class="long">Как в опросе</span><span class="short">Сброс</span></button>
-          <button class="ghostbtn" id="clear" type="button" title="Очистить корзины"><span class="long">Очистить корзины</span><span class="short">Очистить</span></button>
+          <button class="ghostbtn" id="reset" type="button" data-i18n-title="reset"><span class="long" data-i18n="reset"></span><span class="short" data-i18n="resetShort"></span></button>
+          <button class="ghostbtn" id="clear" type="button" data-i18n-title="clear"><span class="long" data-i18n="clear"></span><span class="short" data-i18n="clearShort"></span></button>
         </div>
       </div>
       <div class="list" id="list-p"></div>
@@ -263,95 +276,198 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
 </div>
 
 <dialog class="info" id="info">
-  <button class="ghostbtn close" id="info-close" type="button" aria-label="Закрыть">✕</button>
-  <h2>Как играть</h2>
-  <p>Перетащите партию в корзину, нажмите на неё (из корзины она уйдёт в «не распределены», оттуда вернётся обратно) или используйте стрелки ←, →, ↓. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
-  <p>«Не распределены»: арабские партии и альянс Хенделя. В опросах их считают отдельно от двух блоков.</p>
-  <h2>Источники</h2>
-  <p>Последний опрос каждого издания перед запретом на публикацию 23.10.
+  <button class="ghostbtn close" id="info-close" type="button" data-i18n-aria="close">✕</button>
+  <h2 data-i18n="howTitle"></h2>
+  <p data-i18n="how"></p>
+  <p data-i18n="poolHow"></p>
+  <h2 data-i18n="srcTitle"></h2>
+  <p><span data-i18n="srcIntro"></span>
     <a href="https://www.timesofisrael.com/final-polls-before-election-show-both-blocs-short-of-majority-small-parties-out-of-knesset/" target="_blank" rel="noopener">The Times of Israel, 23.10</a>,
-    <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election" target="_blank" rel="noopener">сводная таблица опросов (Википедия)</a>,
+    <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election" target="_blank" rel="noopener" data-i18n="wiki"></a>,
     <a href="https://themedialine.org/top-stories/israels-election-the-polls-are-split-and-so-is-the-press/" target="_blank" rel="noopener">The Media Line</a>.</p>
-  <p class="credits">Фото: Wikimedia Commons, обрезаны и уменьшены.
-    <a href="https://commons.wikimedia.org/wiki/File:Yair_Golan_(SHL_9404).jpg" target="_blank" rel="noopener">Голан</a> (Shlomi Amsalem, CC BY-SA 4.0);
-    <a href="https://commons.wikimedia.org/wiki/File:Gadi_Eisenkot_2_(cropped).jpg" target="_blank" rel="noopener">Айзенкот</a> (Yahav Trudler, CC BY-SA 3.0);
-    <a href="https://commons.wikimedia.org/wiki/File:Naftali_Bennett_official_portrait.jpg" target="_blank" rel="noopener">Беннет</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:Yair_Lapid_(D1237-011).jpg" target="_blank" rel="noopener">Лапид</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:Benjamin_Netanyahu,_February_2023_(cropped)(b).jpg" target="_blank" rel="noopener">Нетаньяху</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:Bezalel_Smotrich.jpg" target="_blank" rel="noopener">Смотрич</a> (Avi Ohayon, CC BY-SA 3.0);
-    <a href="https://commons.wikimedia.org/wiki/File:Avigdor_Lieberman_2017.jpg" target="_blank" rel="noopener">Либерман</a> (Jim Mattis, общественное достояние);
-    <a href="https://commons.wikimedia.org/wiki/File:Ayman_Odeh_2021.png" target="_blank" rel="noopener">Оде</a> (Amir Deeb, CC BY-SA 4.0);
-    <a href="https://commons.wikimedia.org/wiki/File:Mansour_Abbas,_April_3_2023_(cropped).jpg" target="_blank" rel="noopener">Аббас</a> (U.S. Embassy Jerusalem, CC BY 2.0);
-    <a href="https://commons.wikimedia.org/wiki/File:%D7%99%D7%95%D7%A2%D7%96-%D7%94%D7%A0%D7%93%D7%9C-%D7%91%D7%90%D7%95%D7%9C%D7%A4%D7%9F-103fm-%D7%A6%D7%99%D7%9C%D7%95%D7%9D-%D7%99%D7%A0%D7%99%D7%91-%D7%9E%D7%95%D7%A8%D7%95%D7%96%D7%95%D7%91%D7%A1%D7%A7%D7%99.jpg" target="_blank" rel="noopener">Хендель</a> (Yaniv Morozovsky, CC BY-SA 4.0);
-    <a href="https://commons.wikimedia.org/wiki/File:Yaron_zalicha.jpg" target="_blank" rel="noopener">Зелеха</a> (Yaron Zelekha, CC BY-SA 3.0);
-    <a href="https://commons.wikimedia.org/wiki/File:%D7%90%D7%A8%D7%99%D7%94_%D7%93%D7%A8%D7%A2%D7%99_2.jpg" target="_blank" rel="noopener">Дери</a> (Revach Productions, CC BY-SA 3.0);
-    <a href="https://commons.wikimedia.org/wiki/File:Yaakev_asher.jpg" target="_blank" rel="noopener">Ашер</a> (Yossistinknesset, CC BY-SA 4.0);
-    <a href="https://commons.wikimedia.org/wiki/File:Itamar_Ben_Gvir_3_(cropped).jpg" target="_blank" rel="noopener">Бен-Гвир</a> (Alon Nuriel, CC BY-SA 3.0).</p>
+  <p class="credits" id="credits"></p>
 </dialog>
 
 <script>
 (function(){
 'use strict';
 
+/* ---------- language ---------- */
+var LANGS = ['ru','en','he'];
+var lang = (function(){
+  var q = (location.search.match(/[?&]lang=(ru|en|he)/) || [])[1];
+  if(q) return q;
+  try { var s = localStorage.getItem('lang'); if(LANGS.indexOf(s) >= 0) return s; } catch(_) {}
+  var nav = (navigator.language || '').slice(0, 2);
+  return nav === 'he' || nav === 'iw' ? 'he' : nav === 'en' ? 'en' : 'ru';
+})();
+function L(o){ return o[lang]; }
+
+/* Leader names: party subtitles and photo credits */
+var LEADERS = {
+  golan:{ru:'Голан', en:'Golan', he:'גולן'},
+  eisenkot:{ru:'Айзенкот', en:'Eisenkot', he:'איזנקוט'},
+  bennett:{ru:'Беннет', en:'Bennett', he:'בנט'},
+  lapid:{ru:'Лапид', en:'Lapid', he:'לפיד'},
+  lieberman:{ru:'Либерман', en:'Lieberman', he:'ליברמן'},
+  odeh:{ru:'Оде', en:'Odeh', he:'עודה'},
+  abbas:{ru:'Аббас', en:'Abbas', he:'עבאס'},
+  hendel:{ru:'Хендель', en:'Hendel', he:'הנדל'},
+  zelekha:{ru:'Зелеха', en:'Zelekha', he:'זליכה'},
+  netanyahu:{ru:'Нетаньяху', en:'Netanyahu', he:'נתניהו'},
+  deri:{ru:'Дери', en:'Deri', he:'דרעי'},
+  asher:{ru:'Ашер', en:'Asher', he:'אשר'},
+  bengvir:{ru:'Бен-Гвир', en:'Ben-Gvir', he:'בן גביר'},
+  smotrich:{ru:'Смотрич', en:'Smotrich', he:'סמוטריץ\''}
+};
+
 var PARTIES = [
-  {id:'democrats', name:'Демократы', sub:'Голан', img:['golan'], def:'b'},
-  {id:'yashar',    name:'Яшар', sub:'Айзенкот', img:['eisenkot'], def:'b'},
-  {id:'together',  name:'Вместе', sub:'Беннет, Лапид', img:['bennett','lapid'], def:'b'},
-  {id:'yb',        name:'Ецзраэль Бейтену', sub:'Либерман', img:['lieberman'], def:'b'},
-  {id:'jl',        name:'Объединённый список', sub:'Оде', img:['odeh'], def:'p'},
-  {id:'raam',      name:'Раам', sub:'Аббас', img:['abbas'], def:'p'},
-  {id:'hendel',    name:'Хендель и Зелеха', sub:'Резервисты', img:['hendel','zelekha'], def:'p'},
-  {id:'likud',     name:'Ликуд', sub:'Нетаньяху', img:['netanyahu'], def:'a'},
-  {id:'shas',      name:'Шас', sub:'Дери', img:['deri'], def:'a'},
-  {id:'utj',       name:'ЮТИ', sub:'Ашер', img:['asher'], def:'a'},
-  {id:'otzma',     name:'Оцма Иегудит', sub:'Бен-Гвир', img:['bengvir'], def:'a'},
-  {id:'rz',        name:'Религиозный сионизм', sub:'Смотрич', img:['smotrich'], def:'a'}
+  {id:'democrats', name:{ru:'Демократы', en:'The Democrats', he:'הדמוקרטים'}, img:['golan'], def:'b'},
+  {id:'yashar',    name:{ru:'Яшар', en:'Yashar', he:'ישר'}, img:['eisenkot'], def:'b'},
+  {id:'together',  name:{ru:'Вместе', en:'Together', he:'ביחד'}, img:['bennett','lapid'], def:'b'},
+  {id:'yb',        name:{ru:'Исраэль Бейтену', en:'Yisrael Beytenu', he:'ישראל ביתנו'}, img:['lieberman'], def:'b'},
+  {id:'jl',        name:{ru:'Объединённый список', en:'Joint List', he:'הרשימה המשותפת'}, img:['odeh'], def:'p'},
+  {id:'raam',      name:{ru:'Раам', en:'Ra\'am', he:'רע"מ'}, img:['abbas'], def:'p'},
+  {id:'hendel',    name:{ru:'Хендель и Зелеха', en:'Hendel & Zelekha', he:'הנדל וזליכה'}, sub:{ru:'Резервисты', en:'The Reservists', he:'המילואימניקים'}, img:['hendel','zelekha'], def:'p'},
+  {id:'likud',     name:{ru:'Ликуд', en:'Likud', he:'הליכוד'}, img:['netanyahu'], def:'a'},
+  {id:'shas',      name:{ru:'Шас', en:'Shas', he:'ש"ס'}, img:['deri'], def:'a'},
+  {id:'utj',       name:{ru:'ЮТИ', en:'UTJ', he:'יהדות התורה'}, img:['asher'], def:'a'},
+  {id:'otzma',     name:{ru:'Оцма Иегудит', en:'Otzma Yehudit', he:'עוצמה יהודית'}, img:['bengvir'], def:'a'},
+  {id:'rz',        name:{ru:'Религиозный сионизм', en:'Religious Zionism', he:'הציונות הדתית'}, img:['smotrich'], def:'a'}
 ];
 var BYID = {};
 PARTIES.forEach(function(p){ BYID[p.id] = p; });
 var CANON = PARTIES.map(function(p){ return p.id; });
+function partySub(p){
+  return p.sub ? L(p.sub) : p.img.map(function(f){ return L(LEADERS[f]); }).join(', ');
+}
 
 /* Last published poll of each outlet before the 23.10 publication ban. Parties below the 3.25% threshold get 0. */
 var SOURCES = {
   kan: {
-    label:'Кан 11', date:'23.10', by:'Kantar', n:1106,
+    label:{ru:'Кан 11', en:'Kan 11', he:'כאן 11'}, date:'23.10', by:{ru:'Kantar', en:'Kantar', he:'קנטאר'}, n:1106,
     seats:{yashar:22,likud:20,together:14,democrats:8,yb:8,shas:7,utj:8,otzma:8,rz:7,jl:9,raam:5,hendel:4}
   },
   ch12: {
-    label:'Канал 12', date:'22–23.10', by:'Мидгам', n:1018,
+    label:{ru:'Канал 12', en:'Channel 12', he:'חדשות 12'}, date:'22–23.10', by:{ru:'Мидгам', en:'Midgam', he:'מדגם'}, n:1018,
     seats:{yashar:23,likud:21,together:15,democrats:10,yb:8,shas:8,utj:7,otzma:8,rz:6,jl:9,raam:5,hendel:0}
   },
   ch13: {
-    label:'Канал 13', date:'23.10', by:'Мадад, Мидгам', n:1875,
+    label:{ru:'Канал 13', en:'Channel 13', he:'חדשות 13'}, date:'23.10', by:{ru:'Мадад, Мидгам', en:'Madad, Midgam', he:'המדד, מדגם'}, n:1875,
     seats:{yashar:22,likud:19,together:14,democrats:10,yb:8,shas:7,utj:8,otzma:8,rz:8,jl:9,raam:7,hendel:0}
   },
   ch14: {
-    label:'Канал 14', date:'22.10', by:'Филбер, Next Data', n:7937,
+    label:{ru:'Канал 14', en:'Channel 14', he:'ערוץ 14'}, date:'22.10', by:{ru:'Филбер, Next Data', en:'Filber, Next Data', he:'פילבר, נקסט דאטה'}, n:7937,
     seats:{yashar:20,likud:30,together:11,democrats:8,yb:5,shas:9,utj:8,otzma:8,rz:7,jl:8,raam:6,hendel:0}
   },
   ih: {
-    label:'Исраэль ха-Йом', date:'22.10', by:'Kantar', n:0,
+    label:{ru:'Исраэль ха-Йом', en:'Israel Hayom', he:'ישראל היום'}, date:'22.10', by:{ru:'Kantar', en:'Kantar', he:'קנטאר'}, n:0,
     seats:{yashar:23,likud:21,together:14,democrats:8,yb:7,shas:8,utj:7,otzma:8,rz:6,jl:9,raam:5,hendel:4}
   },
   zman: {
-    label:'Зман Исраэль', date:'21–22.10', by:'Йоси Татика', n:500,
+    label:{ru:'Зман Исраэль', en:'Zman Yisrael', he:'זמן ישראל'}, date:'21–22.10', by:{ru:'Йоси Татика', en:'Yossi Tatika', he:'יוסי טטיקה'}, n:500,
     seats:{yashar:23,likud:21,together:11,democrats:8,yb:9,shas:8,utj:8,otzma:8,rz:6,jl:9,raam:5,hendel:4}
   },
   maariv: {
-    label:'Маарив', date:'19–22.10', by:'Лазар', n:1048,
+    label:{ru:'Маарив', en:'Maariv', he:'מעריב'}, date:'19–22.10', by:{ru:'Лазар', en:'Lazar', he:'לזר'}, n:1048,
     seats:{yashar:21,likud:19,together:15,democrats:10,yb:8,shas:8,utj:7,otzma:7,rz:7,jl:9,raam:5,hendel:4}
   },
   i24: {
-    label:'i24NEWS', date:'20.10', by:'Direct Polls', n:521,
+    label:{ru:'i24NEWS', en:'i24NEWS', he:'i24NEWS'}, date:'20.10', by:{ru:'Direct Polls', en:'Direct Polls', he:'דיירקט פולס'}, n:521,
     seats:{yashar:20,likud:26,together:12,democrats:9,yb:7,shas:8,utj:8,otzma:9,rz:7,jl:8,raam:6,hendel:0}
   },
   walla: {
-    label:'Walla', date:'19.10', by:'Лазар', n:601,
+    label:{ru:'Walla', en:'Walla', he:'וואלה'}, date:'19.10', by:{ru:'Лазар', en:'Lazar', he:'לזר'}, n:601,
     seats:{yashar:23,likud:19,together:14,democrats:9,yb:8,shas:8,utj:7,otzma:8,rz:6,jl:8,raam:6,hendel:4}
   }
 };
 var ORDER = ['kan','ch12','ch13','ch14','ih','zman','maariv','i24','walla'];
-var ZN = {a:'Блок Нетаньяху', b:'Блок Айзенкота', p:'Не распределены'};
+
+var CREDITS = [
+  ['golan', 'Yair_Golan_(SHL_9404).jpg', 'Shlomi Amsalem', 'CC BY-SA 4.0'],
+  ['eisenkot', 'Gadi_Eisenkot_2_(cropped).jpg', 'Yahav Trudler', 'CC BY-SA 3.0'],
+  ['bennett', 'Naftali_Bennett_official_portrait.jpg', 'Avi Ohayon', 'CC BY-SA 3.0'],
+  ['lapid', 'Yair_Lapid_(D1237-011).jpg', 'Avi Ohayon', 'CC BY-SA 3.0'],
+  ['netanyahu', 'Benjamin_Netanyahu,_February_2023_(cropped)(b).jpg', 'Avi Ohayon', 'CC BY-SA 3.0'],
+  ['smotrich', 'Bezalel_Smotrich.jpg', 'Avi Ohayon', 'CC BY-SA 3.0'],
+  ['lieberman', 'Avigdor_Lieberman_2017.jpg', 'Jim Mattis', 'PD'],
+  ['odeh', 'Ayman_Odeh_2021.png', 'Amir Deeb', 'CC BY-SA 4.0'],
+  ['abbas', 'Mansour_Abbas,_April_3_2023_(cropped).jpg', 'U.S. Embassy Jerusalem', 'CC BY 2.0'],
+  ['hendel', '%D7%99%D7%95%D7%A2%D7%96-%D7%94%D7%A0%D7%93%D7%9C-%D7%91%D7%90%D7%95%D7%9C%D7%A4%D7%9F-103fm-%D7%A6%D7%99%D7%9C%D7%95%D7%9D-%D7%99%D7%A0%D7%99%D7%91-%D7%9E%D7%95%D7%A8%D7%95%D7%96%D7%95%D7%91%D7%A1%D7%A7%D7%99.jpg', 'Yaniv Morozovsky', 'CC BY-SA 4.0'],
+  ['zelekha', 'Yaron_zalicha.jpg', 'Yaron Zelekha', 'CC BY-SA 3.0'],
+  ['deri', '%D7%90%D7%A8%D7%99%D7%94_%D7%93%D7%A8%D7%A2%D7%99_2.jpg', 'Revach Productions', 'CC BY-SA 3.0'],
+  ['asher', 'Yaakev_asher.jpg', 'Yossistinknesset', 'CC BY-SA 4.0'],
+  ['bengvir', 'Itamar_Ben_Gvir_3_(cropped).jpg', 'Alon Nuriel', 'CC BY-SA 3.0']
+];
+
+/* UI strings. Values that are functions take numbers and return the sentence. */
+var T = {
+  ru: {
+    title:'Выборы-Выборы, ...', eyebrow:'Кнессет 26 · выборы 27.10.2026',
+    lede:'Перетащите партии в корзины и выберите опрос. Побеждает корзина, в которой набралось 61 мандат из 120.',
+    langAria:'Язык', tabsAria:'Источник опроса', info:'Как играть и источники',
+    hemiAria:'Кнессет: 120 мест, окрашенных по корзинам', needed:'нужно из 120',
+    blocA:'Блок Нетаньяху', blocB:'Блок Айзенкота', pool:'Не распределены',
+    reset:'Как в опросе', resetShort:'Сброс', clear:'Очистить корзины', clearShort:'Очистить',
+    empty:'Перетащите партию сюда', zero:'В этом опросе партия не проходит порог', close:'Закрыть',
+    howTitle:'Как играть',
+    how:'Перетащите партию в корзину, нажмите на неё (из корзины она уйдёт в «не распределены», оттуда вернётся обратно) или используйте стрелки ←, →, ↓. Побеждает корзина, в которой набралось 61 мандат из 120.',
+    poolHow:'«Не распределены»: арабские партии и альянс Хенделя. В опросах их считают отдельно от двух блоков.',
+    srcTitle:'Источники', srcIntro:'Последний опрос каждого издания перед запретом на публикацию 23.10.',
+    wiki:'сводная таблица опросов (Википедия)', photos:'Фото: Wikimedia Commons, обрезаны и уменьшены.', pd:'общественное достояние',
+    asked:function(n){ return 'опрошено ' + n; },
+    seats:function(n){ return plural(n, 'мандат', 'мандата', 'мандатов'); },
+    now:'сейчас',
+    winA:function(n){ return 'Блок Нетаньяху набирает большинство: ' + n + ' из 120.'; },
+    winB:function(n){ return 'Блок Айзенкота набирает большинство: ' + n + ' из 120.'; },
+    none:function(a, b){ return 'Ни у кого нет 61. У Нетаньяху не хватает ' + a + ', у Айзенкота ' + b + '.'; },
+    left:function(n){ return ' Не распределено: ' + n + '.'; }
+  },
+  en: {
+    title:'Elections, Elections, ...', eyebrow:'26th Knesset · election 27.10.2026',
+    lede:'Drag parties into the blocs and pick a poll. A bloc wins when it reaches 61 of 120 seats.',
+    langAria:'Language', tabsAria:'Poll source', info:'How to play & sources',
+    hemiAria:'Knesset: 120 seats colored by bloc', needed:'needed of 120',
+    blocA:'Netanyahu bloc', blocB:'Eisenkot bloc', pool:'Unassigned',
+    reset:'As in poll', resetShort:'Reset', clear:'Clear blocs', clearShort:'Clear',
+    empty:'Drag a party here', zero:'Below the threshold in this poll', close:'Close',
+    howTitle:'How to play',
+    how:'Drag a party into a bloc, or tap it: from a bloc it goes to “Unassigned”, and from there back again. Arrow keys ←, →, ↓ work too. A bloc wins with 61 of 120 seats.',
+    poolHow:'“Unassigned”: the Arab parties and Hendel’s alliance. Polls count them separately from the two blocs.',
+    srcTitle:'Sources', srcIntro:'Each outlet’s last poll before the publication ban on 23.10.',
+    wiki:'poll table (Wikipedia)', photos:'Photos: Wikimedia Commons, cropped and resized.', pd:'public domain',
+    asked:function(n){ return 'n = ' + n; },
+    seats:function(n){ return n === 1 ? 'seat' : 'seats'; },
+    now:'now in',
+    winA:function(n){ return 'The Netanyahu bloc has a majority: ' + n + ' of 120.'; },
+    winB:function(n){ return 'The Eisenkot bloc has a majority: ' + n + ' of 120.'; },
+    none:function(a, b){ return 'Nobody has 61. Netanyahu is ' + a + ' short, Eisenkot ' + b + ' short.'; },
+    left:function(n){ return ' Unassigned: ' + n + '.'; }
+  },
+  he: {
+    title:'בחירות, בחירות, ...', eyebrow:'הכנסת ה-26 · בחירות 27.10.2026',
+    lede:'גררו מפלגות לגושים ובחרו סקר. גוש מנצח כשהוא מגיע ל-61 מתוך 120 מנדטים.',
+    langAria:'שפה', tabsAria:'מקור הסקר', info:'איך משחקים ומקורות',
+    hemiAria:'הכנסת: 120 מושבים לפי גושים', needed:'נדרשים מתוך 120',
+    blocA:'גוש נתניהו', blocB:'גוש איזנקוט', pool:'לא משויכים',
+    reset:'כמו בסקר', resetShort:'איפוס', clear:'ניקוי הגושים', clearShort:'ניקוי',
+    empty:'גררו מפלגה לכאן', zero:'מתחת לאחוז החסימה בסקר זה', close:'סגירה',
+    howTitle:'איך משחקים',
+    how:'גררו מפלגה לגוש, או הקישו עליה: מגוש היא עוברת ל"לא משויכים", ומשם חוזרת. אפשר גם בחצים ←, →, ↓. גוש מנצח עם 61 מתוך 120 מנדטים.',
+    poolHow:'"לא משויכים": המפלגות הערביות והברית של הנדל. בסקרים הן נספרות בנפרד משני הגושים.',
+    srcTitle:'מקורות', srcIntro:'הסקר האחרון של כל כלי תקשורת לפני איסור הפרסום ב-23.10.',
+    wiki:'טבלת הסקרים (ויקיפדיה)', photos:'תמונות: ויקישיתוף, נחתכו והוקטנו.', pd:'נחלת הכלל',
+    asked:function(n){ return n + ' נשאלים'; },
+    seats:function(n){ return n === 1 ? 'מנדט' : 'מנדטים'; },
+    now:'כרגע',
+    winA:function(n){ return 'לגוש נתניהו יש רוב: ' + n + ' מתוך 120.'; },
+    winB:function(n){ return 'לגוש איזנקוט יש רוב: ' + n + ' מתוך 120.'; },
+    none:function(a, b){ return 'לאף גוש אין 61. לנתניהו חסרים ' + a + ', לאיזנקוט ' + b + '.'; },
+    left:function(n){ return ' לא משויכים: ' + n + '.'; }
+  }
+};
+function t(k){ return T[lang][k]; }
+var ZK = {a:'blocA', b:'blocB', p:'pool'};
 
 var src = 'ch12';
 var assign = {};
@@ -388,11 +504,12 @@ var circles = seatPos.map(function(s){
 
 function paintSeats(S){
   var seq = [];
-  ['b','p','a'].forEach(function(z){
+  /* seats run left to right; in RTL the baskets swap sides, so the hemicycle does too */
+  (lang === 'he' ? ['a','p','b'] : ['b','p','a']).forEach(function(z){
     var k = 0;
     CANON.filter(function(id){ return assign[id] === z; }).forEach(function(id){
       var n = S.seats[id];
-      for(var i = 0; i < n; i++) seq.push({z:z, alt:(k % 2 === 1), name:BYID[id].name});
+      for(var i = 0; i < n; i++) seq.push({z:z, alt:(k % 2 === 1), name:L(BYID[id].name)});
       if(n > 0) k++;
     });
   });
@@ -405,12 +522,12 @@ function paintSeats(S){
 
 /* ---------- render ---------- */
 function chipHTML(id, z, n, S){
-  var p = BYID[id];
-  var title = n === 0 ? ' title="В этом опросе партия не проходит порог"' : '';
+  var p = BYID[id], name = esc(L(p.name));
+  var title = n === 0 ? ' title="' + esc(t('zero')) + '"' : '';
   return '<button type="button" class="chip in-' + z + (n === 0 ? ' zero' : '') + '" data-id="' + id + '"' + title +
-    ' aria-label="' + p.name + ', ' + n + ' мандатов, сейчас: ' + ZN[z] + '">' +
+    ' aria-label="' + name + ', ' + n + ' ' + t('seats')(n) + ', ' + t('now') + ': ' + esc(t(ZK[z])) + '">' +
     '<span class="faces">' + p.img.map(function(f){ return '<img src="img/' + f + '.jpg" alt="" draggable="false" width="48" height="48">'; }).join('') + '</span>' +
-    '<span class="t">' + p.name + (p.sub ? '<small>' + p.sub + '</small>' : '') + '</span>' +
+    '<span class="t">' + name + '<small>' + esc(partySub(p)) + '</small></span>' +
     '<span class="n">' + n + '</span></button>';
 }
 
@@ -434,20 +551,18 @@ function render(){
     $('bar-' + z).style.width = Math.min(100, n / 61 * 100) + '%';
     document.querySelector('.zone-' + z).classList.toggle('won', n >= 61);
   });
-  $('pool-sum').innerHTML = tot.p + '<span class="unit"> ' + plural(tot.p, 'мандат', 'мандата', 'мандатов') + '</span>';
+  $('pool-sum').innerHTML = tot.p + '<span class="unit"> ' + t('seats')(tot.p) + '</span>';
 
   var v = $('verdict');
   v.className = 'verdict';
   if(tot.a >= 61){
     v.classList.add('win-a');
-    v.textContent = 'Блок Нетаньяху набирает большинство: ' + tot.a + ' из 120.';
+    v.textContent = t('winA')(tot.a);
   } else if(tot.b >= 61){
     v.classList.add('win-b');
-    v.textContent = 'Блок Айзенкота набирает большинство: ' + tot.b + ' из 120.';
+    v.textContent = t('winB')(tot.b);
   } else {
-    var t = 'Ни у кого нет 61. У Нетаньяху не хватает ' + (61 - tot.a) + ', у Айзенкота ' + (61 - tot.b) + '.';
-    if(tot.p > 0) t += ' Не распределено: ' + tot.p + '.';
-    v.textContent = t;
+    v.textContent = t('none')(61 - tot.a, 61 - tot.b) + (tot.p > 0 ? t('left')(tot.p) : '');
   }
 
   paintSeats(S);
@@ -472,9 +587,29 @@ function renderSource(){
     b.setAttribute('aria-pressed', b.dataset.src === src ? 'true' : 'false');
   });
   $('meta').innerHTML = '<strong></strong> · ' + S.date + ' · ';
-  $('meta').firstChild.textContent = S.label;
-  $('meta').appendChild(document.createTextNode(S.by + (S.n ? ', опрошено ' + S.n : '')));
+  $('meta').firstChild.textContent = L(S.label);
+  $('meta').appendChild(document.createTextNode(L(S.by) + (S.n ? ', ' + t('asked')(S.n) : '')));
   render();
+}
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function applyLang(){
+  var root = document.documentElement;
+  root.lang = lang;
+  root.dir = lang === 'he' ? 'rtl' : 'ltr';
+  document.title = t('title');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function(el){ el.textContent = t(el.dataset.i18n); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'), function(el){ el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-title]'), function(el){ el.title = t(el.dataset.i18nTitle); });
+  Array.prototype.forEach.call(document.querySelectorAll('.list'), function(el){ el.dataset.empty = t('empty'); });
+  Array.prototype.forEach.call($('lang').children, function(b){ b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false'); });
+  Array.prototype.forEach.call($('tabs').children, function(b){ b.textContent = L(SOURCES[b.dataset.src].label); });
+  $('credits').innerHTML = esc(t('photos')) + ' ' + CREDITS.map(function(c){
+    return '<a href="https://commons.wikimedia.org/wiki/File:' + c[1] + '" target="_blank" rel="noopener">' + esc(L(LEADERS[c[0]])) + '</a> (' +
+      esc(c[2]) + ', ' + (c[3] === 'PD' ? esc(t('pd')) : c[3]) + ')';
+  }).join('; ') + '.';
+  renderSource();
 }
 
 /* ---------- moves ---------- */
@@ -498,9 +633,18 @@ ORDER.forEach(function(k){
   b.type = 'button';
   b.className = 'tab';
   b.dataset.src = k;
-  b.textContent = SOURCES[k].label;
   b.addEventListener('click', function(){ src = k; renderSource(); });
   $('tabs').appendChild(b);
+});
+Array.prototype.forEach.call($('lang').children, function(b){
+  b.addEventListener('click', function(){
+    lang = b.dataset.lang;
+    try { localStorage.setItem('lang', lang); } catch(_) {}
+    if(/[?&]lang=/.test(location.search)){
+      try { history.replaceState(null, '', location.search.replace(/([?&]lang=)(ru|en|he)/, '$1' + lang)); } catch(_) {}
+    }
+    applyLang();
+  });
 });
 $('reset').addEventListener('click', function(){ resetAssign(); render(); });
 $('info-btn').addEventListener('click', function(){ $('info').showModal(); });
@@ -577,11 +721,12 @@ board.addEventListener('click', function(e){
 board.addEventListener('keydown', function(e){
   var chip = e.target.closest('.chip');
   if(!chip) return;
-  var m = {ArrowLeft:'b', ArrowRight:'a', ArrowDown:'p'}[e.key];
+  var rtl = lang === 'he';
+  var m = {ArrowLeft:rtl ? 'a' : 'b', ArrowRight:rtl ? 'b' : 'a', ArrowDown:'p'}[e.key];
   if(m){ e.preventDefault(); lastFocus = chip.dataset.id; move(chip.dataset.id, m); }
 });
 
-renderSource();
+applyLang();
 })();
 </script>
 
