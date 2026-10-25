@@ -92,9 +92,9 @@ h1{font:700 clamp(1.05rem,4.6vw,2rem)/1.1 var(--display);min-width:0}
 .verdict.win-a{background:var(--a-soft)}
 .verdict.win-b{background:var(--b-soft)}
 
-/* Static layout: sizes never depend on how many parties sit in each section; overflowing lists scroll inside */
+/* The hemicycle and the board keep a fixed size; inside the board the pool takes what its chips need and the baskets get the rest */
 .board{display:flex;flex-direction:column;gap:8px;flex:0 0 54%;min-height:0}
-.baskets{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1 1 0;min-height:0}
+.baskets{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1 1 0;min-height:96px}
 .zone{
   min-width:0;min-height:0;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:8px;
   display:flex;flex-direction:column;gap:6px;transition:border-color .2s,background .2s;
@@ -116,9 +116,9 @@ h1{font:700 clamp(1.05rem,4.6vw,2rem)/1.1 var(--display);min-width:0}
 .zone-p.over{border-color:var(--pool);background:var(--pool-soft)}
 .list{display:flex;flex-direction:column;gap:4px;min-height:60px;flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain}
 .list:empty::before{content:attr(data-empty);color:var(--muted);font-size:.78rem;padding:6px 2px}
-.zone-p{border-style:dashed;flex:none;height:104px}
+.zone-p{border-style:dashed;flex:0 1 auto}
 .zone-p .phead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;align-items:center}
-.zone-p .list{flex-direction:row;flex-wrap:wrap;align-content:flex-start;min-height:0;flex:1 1 0}
+.zone-p .list{flex-direction:row;flex-wrap:wrap;align-content:flex-start;min-height:36px;flex:0 1 auto}
 
 .chip{
   display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;flex:none;
@@ -206,7 +206,6 @@ dialog.info .credits{font-size:.78rem;margin-top:8px}
   .faces img+img{margin-inline-start:-12px}
   .lede{display:block}
   .count b{font-size:1.6rem}
-  .zone-p{height:124px}
 }
 /* Wide screens: hemicycle on the left, baskets on the right */
 @media (min-width:900px) and (min-height:520px){
@@ -222,7 +221,6 @@ dialog.info .credits{font-size:.78rem;margin-top:8px}
   .lede{display:block}
   .legend{display:flex}
   .verdict{font-size:.92rem;padding:10px 12px;min-height:calc(2.6em + 20px)}
-  .zone-p{height:208px}
   .zone{padding:12px;gap:8px}
   .zone h2{font-size:.9rem}
   .count b{font-size:1.8rem}
