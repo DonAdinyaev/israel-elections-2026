@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Onest:wght@400;500;600&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* Layout: one column up to 760px. Hemicycle of 120 seats on top, two basket panels side by side, tray of unassigned parties below. */
+/* Layout: fits one viewport. Phones: one column, hemicycle on top, baskets side by side, tray below. Wide screens: hemicycle left, baskets right. */
 :root{
   --bg:#ECEFF3; --panel:#FFFFFF; --ink:#12161C; --muted:#566070; --line:#D0D6DE;
   --a:#1B4DDB; --a-soft:#DCE5FF;
@@ -32,87 +32,98 @@
 }
 
 *{box-sizing:border-box}
+/* Fit mode: the page is exactly one viewport tall. The hemicycle absorbs spare height; lists scroll internally only as a last resort. */
+:root{padding:0!important}
+html,body{height:100%}
 body{
+  margin:0;overflow:hidden;
   background:var(--bg); color:var(--ink);
-  font:400 15px/1.45 var(--body);
-  padding-block:22px 44px;
+  font:400 15px/1.4 var(--body);
+  height:100vh;height:100dvh;
+  padding-top:max(10px,env(safe-area-inset-top,0px));
+  padding-bottom:max(10px,env(safe-area-inset-bottom,0px));
   padding-left:max(16px,env(safe-area-inset-left,0px));
   padding-right:max(16px,env(safe-area-inset-right,0px));
 }
-.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.wrap{max-width:760px;height:100%;margin:0 auto;display:flex;flex-direction:column;gap:8px;min-height:0}
 h1,h2,p{margin:0}
-.eyebrow{font:500 .72rem/1 var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
-h1{font:700 clamp(1.45rem,5.6vw,2.3rem)/1.1 var(--display);text-wrap:balance;margin-top:8px}
-.lede{color:var(--muted);max-width:60ch;margin-top:8px;text-wrap:pretty}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px}
+.eyebrow{font:500 .7rem/1 var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(1.25rem,5vw,2rem)/1.1 var(--display)}
+.lede{color:var(--muted);max-width:60ch;text-wrap:pretty;flex-basis:100%;display:none;margin-top:4px}
 
-.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:none}
 .tab{
-  font:500 .86rem/1 var(--body);padding:9px 14px;border-radius:999px;
+  font:500 .84rem/1 var(--body);padding:8px 12px;border-radius:999px;white-space:nowrap;
   border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;
 }
 .tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.meta{font-size:.8rem;color:var(--muted);max-width:68ch}
+.meta{font-size:.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;flex:none}
 .meta strong{color:var(--ink);font-weight:600}
+.meta .note{display:none}
+.link{font:inherit;color:var(--focus);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 
-.stage{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 12px 10px}
-.stage svg{display:block;width:100%;height:auto}
+.stage{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:8px 10px;
+  display:flex;flex-direction:column;gap:6px;flex:1 1 0;min-height:150px;
+}
+.stage svg{display:block;width:100%;flex:1 1 0;min-height:0}
 .seat{fill:#888;transition:fill .35s,fill-opacity .35s}
 .s-a{fill:var(--a)} .s-b{fill:var(--b)} .s-p{fill:var(--pool)}
 .seat.alt{fill-opacity:.58}
 .big{font:700 34px var(--display);fill:var(--ink);text-anchor:middle}
 .sm{font:400 11px var(--body);fill:var(--muted);text-anchor:middle}
-.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;font-size:.78rem;color:var(--muted);margin-top:4px}
+.legend{display:none;flex-wrap:wrap;justify-content:center;gap:6px 16px;font-size:.78rem;color:var(--muted)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 
 .verdict{
-  border:1px solid var(--line);background:var(--panel);border-radius:12px;
-  padding:12px 14px;font-weight:500;text-wrap:pretty;
+  border-radius:10px;padding:6px 10px;font:500 .82rem/1.3 var(--body);text-wrap:pretty;text-align:center;
+  background:var(--pool-soft);flex:none;
 }
-.verdict.win-a{border-color:var(--a);background:var(--a-soft)}
-.verdict.win-b{border-color:var(--b);background:var(--b-soft)}
+.verdict.win-a{background:var(--a-soft)}
+.verdict.win-b{background:var(--b-soft)}
 
-.board{display:flex;flex-direction:column;gap:10px}
-.baskets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.board{display:flex;flex-direction:column;gap:8px;flex:1 1 auto;min-height:0}
+.baskets{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1 1 auto;min-height:0}
 .zone{
-  min-width:0;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:12px;
-  display:flex;flex-direction:column;gap:10px;transition:border-color .2s,background .2s;
+  min-width:0;min-height:0;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:8px;
+  display:flex;flex-direction:column;gap:6px;transition:border-color .2s,background .2s;
 }
-.zone h2{font:600 .88rem/1.2 var(--body)}
-.count{display:flex;align-items:baseline;gap:6px}
-.count b{font:700 1.9rem/1 var(--display);font-variant-numeric:tabular-nums}
-.count span{font:500 .85rem var(--mono);color:var(--muted)}
+.zhead{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.zone h2{font:600 .82rem/1.2 var(--body)}
+.count{display:flex;align-items:baseline;gap:4px;white-space:nowrap}
+.count b{font:700 1.3rem/1 var(--display);font-variant-numeric:tabular-nums}
+.count span{font:500 .75rem var(--mono);color:var(--muted)}
 .zone-a .count b{color:var(--a)}
 .zone-b .count b{color:var(--b)}
-.bar{height:8px;border-radius:99px;background:var(--pool-soft);overflow:hidden}
+.bar{height:5px;border-radius:99px;background:var(--pool-soft);overflow:hidden;flex:none}
 .bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .4s}
 .zone-a .bar i{background:var(--a)} .zone-b .bar i{background:var(--b)}
-.stat{font-size:.78rem;color:var(--muted);min-height:1.2em}
 .zone.won{border-color:var(--ink)}
 .zone-a.won{border-color:var(--a)} .zone-b.won{border-color:var(--b)}
 .zone-a.over{border-color:var(--a);background:var(--a-soft)}
 .zone-b.over{border-color:var(--b);background:var(--b-soft)}
 .zone-p.over{border-color:var(--pool);background:var(--pool-soft)}
-.list{display:flex;flex-direction:column;gap:6px;min-height:84px}
-.list:empty::before{content:"Перетащите партию сюда";color:var(--muted);font-size:.8rem;padding:8px 2px}
-.zone-p{border-style:dashed}
-.zone-p .phead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline}
-.zone-p .psub{font-size:.78rem;color:var(--muted);max-width:56ch}
-.zone-p .list{flex-direction:row;flex-wrap:wrap;min-height:56px}
+.list{display:flex;flex-direction:column;gap:4px;min-height:60px;flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain}
+.list:empty::before{content:"Перетащите партию сюда";color:var(--muted);font-size:.78rem;padding:6px 2px}
+.zone-p{border-style:dashed;flex:none}
+.zone-p .phead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;align-items:center}
+.zone-p .list{flex-direction:row;flex-wrap:wrap;min-height:36px;flex:none}
 
 .chip{
-  display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
-  text-align:left;padding:8px 10px;border-radius:10px;border:1px solid var(--line);
-  background:var(--panel);color:var(--ink);font:500 .84rem/1.2 var(--body);
+  display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;flex:none;
+  text-align:left;padding:6px 8px;border-radius:9px;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font:500 .78rem/1.15 var(--body);
   cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 .chip .t{min-width:0}
-.chip small{display:block;font-size:.72rem;font-weight:400;opacity:.72;margin-top:1px}
-.chip .n{font:600 1rem/1 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
-.chip .n em{font-style:normal;font-weight:500;font-size:.72rem;opacity:.6;margin-right:1px}
+.chip small{display:none;font-size:.7rem;font-weight:400;opacity:.72;margin-top:1px}
+.chip .n{font:600 .9rem/1 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip .n em{font-style:normal;font-weight:500;font-size:.7rem;opacity:.6;margin-right:1px}
 .chip.in-a{background:var(--a-soft);border-color:var(--a)}
 .chip.in-b{background:var(--b-soft);border-color:var(--b)}
 .chip.in-p{background:var(--pool-soft);border-color:var(--pool)}
-.zone-p .chip{width:auto;flex:1 1 150px}
+.zone-p .chip{width:auto;flex:1 1 120px}
 .chip.zero{opacity:.55;border-style:dashed}
 .chip.lifted{opacity:.3}
 .chip.ghost{
@@ -121,28 +132,88 @@ h1{font:700 clamp(1.45rem,5.6vw,2.3rem)/1.1 var(--display);text-wrap:balance;mar
 }
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.controls{display:flex;gap:6px}
 .ghostbtn{
-  font:500 .82rem/1 var(--body);padding:9px 13px;border-radius:10px;
+  font:500 .76rem/1 var(--body);padding:7px 10px;border-radius:9px;white-space:nowrap;
   border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;
 }
-.hint{font-size:.78rem;color:var(--muted);flex:1 1 220px}
-.foot{font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;gap:6px;max-width:70ch}
-.foot a{color:inherit;text-underline-offset:2px}
 
-@media (max-width:420px){ .zone{padding:10px} .count b{font-size:1.65rem} }
+dialog.info{
+  width:min(560px,calc(100vw - 32px));max-height:85dvh;overflow:auto;
+  border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);
+  padding:18px 20px;font-size:.86rem;
+}
+dialog.info::backdrop{background:rgba(0,0,0,.5)}
+dialog.info h2{font:600 1rem/1.2 var(--body);margin:0 0 6px}
+dialog.info p{margin:0 0 10px;color:var(--muted)}
+dialog.info p strong{color:var(--ink)}
+dialog.info a{color:inherit;text-underline-offset:2px}
+dialog.info .close{float:right;margin:-4px -6px 0 8px}
+
+/* Narrow phones: squeeze basket chrome so the hemicycle keeps its height */
+@media (max-width:599px){
+  .zone h2{font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .count span{display:none}
+  .chip{font-size:.74rem;padding:5px 7px}
+  .zone-p .chip{flex-basis:96px}
+  .zone-p h2{font-size:.76rem}
+  .zone-p .phead{flex-wrap:nowrap}
+  .unit{display:none}
+  .board,.baskets{flex:0 1 auto}
+  .ghostbtn{padding:6px 8px;font-size:.72rem}
+  .ghostbtn .long{display:none}
+}
+@media (min-width:600px){ .ghostbtn .short{display:none} }
+/* Roomier phones and tablets: show party leaders */
+@media (min-width:600px) and (min-height:760px){
+  .chip{padding:8px 10px;font-size:.84rem}
+  .chip small{display:block}
+  .lede{display:block}
+  .count b{font-size:1.6rem}
+}
+/* Wide screens: hemicycle on the left, baskets on the right */
+@media (min-width:900px) and (min-height:520px){
+  .wrap{
+    max-width:1180px;display:grid;gap:10px 20px;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+    grid-template-rows:auto auto auto minmax(0,1fr);
+    grid-template-areas:"h b" "t b" "m b" "s b";
+  }
+  header{grid-area:h} .tabs{grid-area:t} .meta{grid-area:m} .stage{grid-area:s;min-height:0}
+  .board{grid-area:b;gap:10px}
+  .lede{display:block}
+  .meta .note{display:block;flex-basis:100%;max-width:68ch}
+  .legend{display:flex}
+  .verdict{font-size:.92rem;padding:10px 12px}
+  .zone{padding:12px;gap:8px}
+  .zone h2{font-size:.9rem}
+  .count b{font-size:1.8rem}
+  .bar{height:7px}
+  .list{gap:6px}
+  .chip{padding:8px 10px;font-size:.86rem}
+  .chip small{display:block}
+  .chip .n{font-size:1rem}
+  .zone-p .chip{flex-basis:160px}
+}
+/* Short landscape phones: let the page scroll rather than crush everything */
+@media (max-height:519px) and (max-width:899px){
+  body{overflow:auto;height:auto}
+  .wrap{height:auto}
+  .stage{flex:none;height:220px}
+  .list{overflow:visible}
+}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
 </style>
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Кнессет 26 · выборы 27 октября 2026</div>
     <h1>Коалиция на 61</h1>
+    <div class="eyebrow">Кнессет 26 · выборы 27.10.2026</div>
     <p class="lede">Перетащите партии в корзины и выберите опрос. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
   </header>
 
   <div class="tabs" role="group" aria-label="Источник опроса" id="tabs"></div>
-  <p class="meta" id="meta"></p>
+  <p class="meta"><span id="meta"></span><button class="link" id="info-btn" type="button">Как играть и источники</button><span class="note" id="note"></span></p>
 
   <div class="stage">
     <svg id="hemi" viewBox="0 0 400 212" role="img" aria-label="Кнессет: 120 мест, окрашенных по корзинам">
@@ -154,50 +225,49 @@ h1{font:700 clamp(1.45rem,5.6vw,2.3rem)/1.1 var(--display);text-wrap:balance;mar
       <span><i style="background:var(--pool)"></i>Не распределены</span>
       <span><i style="background:var(--a)"></i>Блок Нетаньяху</span>
     </div>
+    <div class="verdict" id="verdict" role="status" aria-live="polite"></div>
   </div>
-
-  <div class="verdict" id="verdict" role="status" aria-live="polite"></div>
 
   <div class="board" id="board">
     <div class="baskets">
       <section class="zone zone-b" data-zone="b" aria-label="Блок Айзенкота">
-        <h2>Блок Айзенкота</h2>
-        <div class="count"><b id="cnt-b">0</b><span>/ 61</span></div>
+        <div class="zhead"><h2>Блок Айзенкота</h2><div class="count"><b id="cnt-b">0</b><span>/ 61</span></div></div>
         <div class="bar"><i id="bar-b"></i></div>
-        <p class="stat" id="stat-b"></p>
         <div class="list" id="list-b"></div>
       </section>
       <section class="zone zone-a" data-zone="a" aria-label="Блок Нетаньяху">
-        <h2>Блок Нетаньяху</h2>
-        <div class="count"><b id="cnt-a">0</b><span>/ 61</span></div>
+        <div class="zhead"><h2>Блок Нетаньяху</h2><div class="count"><b id="cnt-a">0</b><span>/ 61</span></div></div>
         <div class="bar"><i id="bar-a"></i></div>
-        <p class="stat" id="stat-a"></p>
         <div class="list" id="list-a"></div>
       </section>
     </div>
     <section class="zone zone-p" data-zone="p" aria-label="Не распределены">
       <div class="phead">
         <h2>Не распределены · <span id="pool-sum">0</span></h2>
-        <p class="psub">Арабские партии и альянс Хенделя: в опросах их считают отдельно от двух блоков.</p>
+        <div class="controls">
+          <button class="ghostbtn" id="reset" type="button" title="Как в опросе"><span class="long">Как в опросе</span><span class="short">Сброс</span></button>
+          <button class="ghostbtn" id="clear" type="button" title="Очистить корзины"><span class="long">Очистить корзины</span><span class="short">Очистить</span></button>
+        </div>
       </div>
       <div class="list" id="list-p"></div>
     </section>
   </div>
-
-  <div class="controls">
-    <button class="ghostbtn" id="reset" type="button">Как в опросе</button>
-    <button class="ghostbtn" id="clear" type="button">Все в «не распределены»</button>
-    <p class="hint">Перетащите партию, нажмите на неё (она перейдёт в следующую корзину) или используйте стрелки ←, →, ↓.</p>
-  </div>
-
-  <div class="foot">
-    <p>≈ означает, что число восстановлено по опубликованным суммам блоков и может отличаться от настоящего. Для простоты считается 61 из 120 без пересчёта голосов партий, не прошедших порог 3,25%. Опросы не являются прогнозом.</p>
-    <p>Источники:
-      <a href="https://www.israelnationalnews.com/news/435074" target="_blank" rel="noopener">финальные опросы (INN)</a>,
-      <a href="https://www.haaretz.com/israel-news/elections/2026-10-22/ty-article/new-polls-show-eisenkot-bloc-leading-netanyahus-but-short-of-majority/000001a1-61de-d3a9-a9bb-69ff31b00000" target="_blank" rel="noopener">Haaretz, 22.10</a>,
-      <a href="https://themedialine.org/top-stories/israels-election-the-polls-are-split-and-so-is-the-press/" target="_blank" rel="noopener">The Media Line</a>.</p>
-  </div>
 </div>
+
+<dialog class="info" id="info">
+  <button class="ghostbtn close" id="info-close" type="button" aria-label="Закрыть">✕</button>
+  <h2>Как играть</h2>
+  <p>Перетащите партию в корзину, нажмите на неё (она перейдёт в следующую корзину) или используйте стрелки ←, →, ↓. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
+  <p>«Не распределены»: арабские партии и альянс Хенделя. В опросах их считают отдельно от двух блоков.</p>
+  <h2>Этот опрос</h2>
+  <p id="info-note"></p>
+  <h2>Оговорки и источники</h2>
+  <p>≈ означает, что число восстановлено по опубликованным суммам блоков и может отличаться от настоящего. Для простоты считается 61 из 120 без пересчёта голосов партий, не прошедших порог 3,25%. Опросы не являются прогнозом.</p>
+  <p>Источники:
+    <a href="https://www.israelnationalnews.com/news/435074" target="_blank" rel="noopener">финальные опросы (INN)</a>,
+    <a href="https://www.haaretz.com/israel-news/elections/2026-10-22/ty-article/new-polls-show-eisenkot-bloc-leading-netanyahus-but-short-of-majority/000001a1-61de-d3a9-a9bb-69ff31b00000" target="_blank" rel="noopener">Haaretz, 22.10</a>,
+    <a href="https://themedialine.org/top-stories/israels-election-the-polls-are-split-and-so-is-the-press/" target="_blank" rel="noopener">The Media Line</a>.</p>
+</dialog>
 
 <script>
 (function(){
@@ -329,10 +399,9 @@ function render(){
     var n = tot[z];
     $('cnt-' + z).textContent = n;
     $('bar-' + z).style.width = Math.min(100, n / 61 * 100) + '%';
-    $('stat-' + z).textContent = n >= 61 ? 'Большинство: ' + n + ' из 120' : 'До 61 не хватает ' + (61 - n);
     document.querySelector('.zone-' + z).classList.toggle('won', n >= 61);
   });
-  $('pool-sum').textContent = tot.p + ' ' + plural(tot.p, 'мандат', 'мандата', 'мандатов');
+  $('pool-sum').innerHTML = tot.p + '<span class="unit"> ' + plural(tot.p, 'мандат', 'мандата', 'мандатов') + '</span>';
 
   var v = $('verdict');
   v.className = 'verdict';
@@ -369,8 +438,12 @@ function renderSource(){
   Array.prototype.forEach.call($('tabs').children, function(b){
     b.setAttribute('aria-pressed', b.dataset.src === src ? 'true' : 'false');
   });
-  $('meta').innerHTML = '<strong></strong> · ' + S.date + '. ' + S.note;
+  $('meta').innerHTML = '<strong></strong> · ' + S.date;
   $('meta').firstChild.textContent = S.label;
+  $('note').textContent = S.note;
+  $('info-note').innerHTML = '<strong></strong> · ' + S.date + '. ';
+  $('info-note').firstChild.textContent = S.label;
+  $('info-note').appendChild(document.createTextNode(S.note));
   render();
 }
 
@@ -396,6 +469,9 @@ ORDER.forEach(function(k){
   $('tabs').appendChild(b);
 });
 $('reset').addEventListener('click', function(){ resetAssign(); render(); });
+$('info-btn').addEventListener('click', function(){ $('info').showModal(); });
+$('info-close').addEventListener('click', function(){ $('info').close(); });
+$('info').addEventListener('click', function(e){ if(e.target === this) this.close(); });
 $('clear').addEventListener('click', function(){ PARTIES.forEach(function(p){ assign[p.id] = 'p'; }); render(); });
 
 /* ---------- drag and drop (pointer events: mouse, touch, pen) ---------- */
