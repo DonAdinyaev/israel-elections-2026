@@ -265,7 +265,7 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
 <dialog class="info" id="info">
   <button class="ghostbtn close" id="info-close" type="button" aria-label="Закрыть">✕</button>
   <h2>Как играть</h2>
-  <p>Перетащите партию в корзину, нажмите на неё (она перейдёт в следующую корзину) или используйте стрелки ←, →, ↓. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
+  <p>Перетащите партию в корзину, нажмите на неё (из корзины она уйдёт в «не распределены», оттуда вернётся обратно) или используйте стрелки ←, →, ↓. Побеждает корзина, в которой набралось 61 мандат из 120.</p>
   <p>«Не распределены»: арабские партии и альянс Хенделя. В опросах их считают отдельно от двух блоков.</p>
   <h2>Источники</h2>
   <p>Последний опрос каждого издания перед запретом на публикацию 23.10.
@@ -482,9 +482,13 @@ function move(id, z){
   assign[id] = z;
   render();
 }
+/* Tap: a basket sends the party to the pool; the pool sends it back to the basket it last left
+   (or its poll bloc; parties that start in the pool go to Eisenkot's basket first). */
+var lastBasket = {};
 function cycle(id){
-  var seq = ['a','b','p'];
-  move(id, seq[(seq.indexOf(assign[id]) + 1) % 3]);
+  var z = assign[id];
+  if(z !== 'p'){ lastBasket[id] = z; move(id, 'p'); return; }
+  move(id, lastBasket[id] || (BYID[id].def === 'p' ? 'b' : BYID[id].def));
 }
 
 /* ---------- source tabs ---------- */
