@@ -116,7 +116,10 @@ h1{font:700 clamp(1.25rem,5vw,2rem)/1.1 var(--display)}
   background:var(--panel);color:var(--ink);font:500 .78rem/1.15 var(--body);
   cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
-.chip .t{min-width:0}
+.chip .t{min-width:0;flex:1 1 auto}
+.faces{display:flex;flex:none}
+.faces img{width:22px;height:22px;border-radius:50%;object-fit:cover;display:block;background:var(--pool-soft);border:1.5px solid var(--panel);pointer-events:none}
+.faces img+img{margin-left:-9px}
 .chip small{display:none;font-size:.7rem;font-weight:400;opacity:.72;margin-top:1px}
 .chip .n{font:600 .9rem/1 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
 .chip .n em{font-style:normal;font-weight:500;font-size:.7rem;opacity:.6;margin-right:1px}
@@ -154,7 +157,9 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
 @media (max-width:599px){
   .zone h2{font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .count span{display:none}
-  .chip{font-size:.74rem;padding:5px 7px}
+  .chip{font-size:.74rem;padding:4px 6px;gap:5px}
+  .faces img{width:20px;height:20px}
+  .faces img+img{margin-left:-8px}
   .zone-p .chip{flex-basis:96px}
   .zone-p h2{font-size:.76rem}
   .zone-p .phead{flex-wrap:nowrap}
@@ -168,6 +173,8 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
 @media (min-width:600px) and (min-height:760px){
   .chip{padding:8px 10px;font-size:.84rem}
   .chip small{display:block}
+  .faces img{width:30px;height:30px}
+  .faces img+img{margin-left:-12px}
   .lede{display:block}
   .count b{font-size:1.6rem}
 }
@@ -192,6 +199,8 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
   .list{gap:6px}
   .chip{padding:8px 10px;font-size:.86rem}
   .chip small{display:block}
+  .faces img{width:32px;height:32px}
+  .faces img+img{margin-left:-12px}
   .chip .n{font-size:1rem}
   .zone-p .chip{flex-basis:160px}
 }
@@ -267,6 +276,20 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
     <a href="https://www.israelnationalnews.com/news/435074" target="_blank" rel="noopener">финальные опросы (INN)</a>,
     <a href="https://www.haaretz.com/israel-news/elections/2026-10-22/ty-article/new-polls-show-eisenkot-bloc-leading-netanyahus-but-short-of-majority/000001a1-61de-d3a9-a9bb-69ff31b00000" target="_blank" rel="noopener">Haaretz, 22.10</a>,
     <a href="https://themedialine.org/top-stories/israels-election-the-polls-are-split-and-so-is-the-press/" target="_blank" rel="noopener">The Media Line</a>.</p>
+  <p class="credits">Фото: Wikimedia Commons, обрезаны и уменьшены.
+    <a href="https://commons.wikimedia.org/wiki/File:Yair_Golan_(SHL_9404).jpg" target="_blank" rel="noopener">Голан</a> (Shlomi Amsalem, CC BY-SA 4.0);
+    <a href="https://commons.wikimedia.org/wiki/File:Gadi_Eisenkot_2_(cropped).jpg" target="_blank" rel="noopener">Айзенкот</a> (Yahav Trudler, CC BY-SA 3.0);
+    <a href="https://commons.wikimedia.org/wiki/File:Naftali_Bennett_official_portrait.jpg" target="_blank" rel="noopener">Беннет</a>,
+    <a href="https://commons.wikimedia.org/wiki/File:Yair_Lapid_(D1237-011).jpg" target="_blank" rel="noopener">Лапид</a>,
+    <a href="https://commons.wikimedia.org/wiki/File:Benjamin_Netanyahu,_February_2023_(cropped)(b).jpg" target="_blank" rel="noopener">Нетаньяху</a>,
+    <a href="https://commons.wikimedia.org/wiki/File:Bezalel_Smotrich.jpg" target="_blank" rel="noopener">Смотрич</a> (Avi Ohayon, CC BY-SA 3.0);
+    <a href="https://commons.wikimedia.org/wiki/File:Avigdor_Lieberman_2017.jpg" target="_blank" rel="noopener">Либерман</a> (Jim Mattis, общественное достояние);
+    <a href="https://commons.wikimedia.org/wiki/File:Ayman_Odeh_2021.png" target="_blank" rel="noopener">Оде</a> (Amir Deeb, CC BY-SA 4.0);
+    <a href="https://commons.wikimedia.org/wiki/File:Mansour_Abbas,_April_3_2023_(cropped).jpg" target="_blank" rel="noopener">Аббас</a> (U.S. Embassy Jerusalem, CC BY 2.0);
+    <a href="https://commons.wikimedia.org/wiki/File:%D7%99%D7%95%D7%A2%D7%96-%D7%94%D7%A0%D7%93%D7%9C-%D7%91%D7%90%D7%95%D7%9C%D7%A4%D7%9F-103fm-%D7%A6%D7%99%D7%9C%D7%95%D7%9D-%D7%99%D7%A0%D7%99%D7%91-%D7%9E%D7%95%D7%A8%D7%95%D7%96%D7%95%D7%91%D7%A1%D7%A7%D7%99.jpg" target="_blank" rel="noopener">Хендель</a> (Yaniv Morozovsky, CC BY-SA 4.0);
+    <a href="https://commons.wikimedia.org/wiki/File:%D7%90%D7%A8%D7%99%D7%94_%D7%93%D7%A8%D7%A2%D7%99_2.jpg" target="_blank" rel="noopener">Дери</a> (Revach Productions, CC BY-SA 3.0);
+    <a href="https://commons.wikimedia.org/wiki/File:Yaakev_asher.jpg" target="_blank" rel="noopener">Ашер</a> (Yossistinknesset, CC BY-SA 4.0);
+    <a href="https://commons.wikimedia.org/wiki/File:Itamar_Ben_Gvir_3_(cropped).jpg" target="_blank" rel="noopener">Бен-Гвир</a> (Alon Nuriel, CC BY-SA 3.0).</p>
 </dialog>
 
 <script>
@@ -274,18 +297,18 @@ dialog.info .close{float:right;margin:-4px -6px 0 8px}
 'use strict';
 
 var PARTIES = [
-  {id:'democrats', name:'Демократы', sub:'Голан', def:'b'},
-  {id:'yashar',    name:'Яшар', sub:'Айзенкот', def:'b'},
-  {id:'together',  name:'Вместе', sub:'Беннет, Лапид', def:'b'},
-  {id:'yb',        name:'Ецзраэль Бейтену', sub:'Либерман', def:'b'},
-  {id:'jl',        name:'Объединённый список', sub:'арабские партии', def:'p'},
-  {id:'raam',      name:'Раам', sub:'арабская партия', def:'p'},
-  {id:'hendel',    name:'Хендель и Зелеха', sub:'Резервисты', def:'p'},
-  {id:'likud',     name:'Ликуд', sub:'Нетаньяху', def:'a'},
-  {id:'shas',      name:'Шас', sub:'', def:'a'},
-  {id:'utj',       name:'ЮТИ', sub:'иудаизм Торы', def:'a'},
-  {id:'otzma',     name:'Оцма Иегудит', sub:'Бен-Гвир', def:'a'},
-  {id:'rz',        name:'Религиозный сионизм', sub:'Смотрич', def:'a'}
+  {id:'democrats', name:'Демократы', sub:'Голан', img:['golan'], def:'b'},
+  {id:'yashar',    name:'Яшар', sub:'Айзенкот', img:['eisenkot'], def:'b'},
+  {id:'together',  name:'Вместе', sub:'Беннет, Лапид', img:['bennett','lapid'], def:'b'},
+  {id:'yb',        name:'Ецзраэль Бейтену', sub:'Либерман', img:['lieberman'], def:'b'},
+  {id:'jl',        name:'Объединённый список', sub:'Оде', img:['odeh'], def:'p'},
+  {id:'raam',      name:'Раам', sub:'Аббас', img:['abbas'], def:'p'},
+  {id:'hendel',    name:'Хендель и Зелеха', sub:'Резервисты', img:['hendel'], def:'p'},
+  {id:'likud',     name:'Ликуд', sub:'Нетаньяху', img:['netanyahu'], def:'a'},
+  {id:'shas',      name:'Шас', sub:'Дери', img:['deri'], def:'a'},
+  {id:'utj',       name:'ЮТИ', sub:'Ашер', img:['asher'], def:'a'},
+  {id:'otzma',     name:'Оцма Иегудит', sub:'Бен-Гвир', img:['bengvir'], def:'a'},
+  {id:'rz',        name:'Религиозный сионизм', sub:'Смотрич', img:['smotrich'], def:'a'}
 ];
 var BYID = {};
 PARTIES.forEach(function(p){ BYID[p.id] = p; });
@@ -377,6 +400,7 @@ function chipHTML(id, z, n, S){
   var title = n === 0 ? ' title="В этом опросе партия не проходит порог"' : '';
   return '<button type="button" class="chip in-' + z + (n === 0 ? ' zero' : '') + '" data-id="' + id + '"' + title +
     ' aria-label="' + p.name + ', ' + n + ' мандатов, сейчас: ' + ZN[z] + '">' +
+    '<span class="faces">' + p.img.map(function(f){ return '<img src="img/' + f + '.jpg" alt="" draggable="false" width="48" height="48">'; }).join('') + '</span>' +
     '<span class="t">' + p.name + (p.sub ? '<small>' + p.sub + '</small>' : '') + '</span>' +
     '<span class="n">' + (est ? '<em>≈</em>' : '') + n + '</span></button>';
 }
