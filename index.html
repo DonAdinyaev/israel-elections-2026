@@ -4,6 +4,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Onest:wght@400;500;600&family=Unbounded:wght@500;700&family=Heebo:wght@400;500;600;800&display=swap" rel="stylesheet">
+<!-- Visitor statistics: GoatCounter (no cookies, no personal data). Dashboard: https://israel-elections-2026.goatcounter.com -->
+<script data-goatcounter="https://israel-elections-2026.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <style>
 /* Layout: fits one viewport. Phones: one column, hemicycle on top, baskets side by side, tray below. Wide screens: hemicycle left, baskets right. */
 :root{
@@ -313,6 +315,7 @@ dialog.info .credits{font-size:.78rem;margin-top:8px}
       <li><a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election" target="_blank" rel="noopener" data-i18n="wiki"></a></li>
       <li><a href="https://themedialine.org/top-stories/israels-election-the-polls-are-split-and-so-is-the-press/" target="_blank" rel="noopener" dir="ltr">The Media Line</a></li>
     </ul>
+    <p data-i18n="stats"></p>
     <details>
       <summary data-i18n="photosTitle"></summary>
       <ul class="credits" id="credits"></ul>
@@ -446,6 +449,7 @@ var T = {
     poolHow:'«Не распределены»: арабские партии и альянс Хенделя. В опросах их считают отдельно от двух блоков.',
     srcTitle:'Источники', srcIntro:'Последний опрос каждого издания перед запретом на публикацию 23.10.',
     wiki:'сводная таблица опросов (Википедия)', photosTitle:'Фото: Wikimedia Commons (обрезаны и уменьшены)', pd:'общественное достояние',
+    stats:'Мы считаем анонимную статистику посещений (GoatCounter): без cookie и без личных данных.',
     asked:function(n){ return 'опрошено ' + n; },
     seats:function(n){ return plural(n, 'мандат', 'мандата', 'мандатов'); },
     now:'сейчас',
@@ -467,6 +471,7 @@ var T = {
     poolHow:'“Unassigned”: the Arab parties and Hendel’s alliance. Polls count them separately from the two blocs.',
     srcTitle:'Sources', srcIntro:'Each outlet’s last poll before the publication ban on 23.10.',
     wiki:'poll table (Wikipedia)', photosTitle:'Photos: Wikimedia Commons (cropped and resized)', pd:'public domain',
+    stats:'We count anonymous visit statistics (GoatCounter): no cookies, no personal data.',
     asked:function(n){ return 'n = ' + n; },
     seats:function(n){ return n === 1 ? 'seat' : 'seats'; },
     now:'now in',
@@ -488,6 +493,7 @@ var T = {
     poolHow:'"לא משויכים": המפלגות הערביות והברית של הנדל. בסקרים הן נספרות בנפרד משני הגושים.',
     srcTitle:'מקורות', srcIntro:'הסקר האחרון של כל כלי תקשורת לפני איסור הפרסום ב-23.10.',
     wiki:'טבלת הסקרים (ויקיפדיה)', photosTitle:'תמונות: ויקישיתוף (נחתכו והוקטנו)', pd:'נחלת הכלל',
+    stats:'אנחנו סופרים סטטיסטיקת ביקורים אנונימית (GoatCounter): בלי עוגיות ובלי מידע אישי.',
     asked:function(n){ return n + ' נשאלים'; },
     seats:function(n){ return n === 1 ? 'מנדט' : 'מנדטים'; },
     now:'כרגע',
@@ -508,6 +514,11 @@ var tot = {a:0,b:0,p:0};
 var lastFocus = null;
 
 function $(id){ return document.getElementById(id); }
+
+/* ---------- statistics: actions show up as events in the GoatCounter dashboard ---------- */
+function track(name){
+  try { if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:name, title:name, event:true}); } catch(_) {}
+}
 
 /* ---------- hemicycle ---------- */
 var NS = 'http://www.w3.org/2000/svg';
@@ -647,8 +658,10 @@ function applyLang(){
 }
 
 /* ---------- moves ---------- */
+var moved = {};
 function move(id, z){
   if(assign[id] === z) { render(); return; }
+  if(!moved[id + z]){ moved[id + z] = true; track('move/' + id + '/' + z); }
   assign[id] = z;
   render();
 }
@@ -669,6 +682,7 @@ ORDER.forEach(function(k){
   b.dataset.src = k;
   b.addEventListener('click', function(){
     src = k; renderSource();
+    track('poll/' + k);
     if(b.scrollIntoView) b.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'});
   });
   $('tabs').appendChild(b);
@@ -691,6 +705,7 @@ $('tabs').addEventListener('wheel', function(e){
 Array.prototype.forEach.call($('lang').children, function(b){
   b.addEventListener('click', function(){
     lang = b.dataset.lang;
+    track('lang/' + lang);
     try { localStorage.setItem('lang', lang); } catch(_) {}
     if(/[?&]lang=/.test(location.search)){
       try { history.replaceState(null, '', location.search.replace(/([?&]lang=)(ru|en|he)/, '$1' + lang)); } catch(_) {}
@@ -698,11 +713,11 @@ Array.prototype.forEach.call($('lang').children, function(b){
     applyLang();
   });
 });
-$('reset').addEventListener('click', function(){ resetAssign(); render(); });
-$('info-btn').addEventListener('click', function(){ $('info').showModal(); });
+$('reset').addEventListener('click', function(){ resetAssign(); render(); track('reset'); });
+$('info-btn').addEventListener('click', function(){ $('info').showModal(); track('info'); });
 $('info-close').addEventListener('click', function(){ $('info').close(); });
 $('info').addEventListener('click', function(e){ if(e.target === this) this.close(); });
-$('clear').addEventListener('click', function(){ PARTIES.forEach(function(p){ assign[p.id] = 'p'; }); render(); });
+$('clear').addEventListener('click', function(){ PARTIES.forEach(function(p){ assign[p.id] = 'p'; }); render(); track('clear'); });
 
 /* ---------- drag and drop (pointer events: mouse, touch, pen) ---------- */
 var board = $('board');
