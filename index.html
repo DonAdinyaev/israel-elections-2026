@@ -309,6 +309,10 @@ dialog.info .credits{font-size:.78rem;margin-top:8px}
     <p data-i18n="how"></p>
     <p data-i18n="poolHow"></p>
     <h3 data-i18n="srcTitle"></h3>
+    <p data-i18n="countIntro"></p>
+    <ul>
+      <li><a href="https://www.ynet.co.il/news/blogs/article/sj60fvepze" target="_blank" rel="noopener" data-i18n="countLink"></a></li>
+    </ul>
     <p data-i18n="srcIntro"></p>
     <ul>
       <li><a href="https://www.timesofisrael.com/final-polls-before-election-show-both-blocs-short-of-majority-small-parties-out-of-knesset/" target="_blank" rel="noopener" dir="ltr">The Times of Israel, 23.10</a></li>
@@ -376,8 +380,13 @@ function partySub(p){
   return p.sub ? L(p.sub) : p.img.map(function(f){ return L(LEADERS[f]); }).join(', ');
 }
 
-/* Last published poll of each outlet before the 23.10 publication ban. Parties below the 3.25% threshold get 0. */
+/* count: Central Elections Committee tally at 99% (double envelopes included), as reported by ynet on 29.10.
+   The rest: last published poll of each outlet before the 23.10 publication ban. Parties below the 3.25% threshold get 0. */
 var SOURCES = {
+  count: {
+    label:{ru:'Итоги · 99%', en:'Results · 99%', he:'תוצאות · 99%'}, date:'29.10', by:{ru:'ЦИК', en:'Central Elections Committee', he:'ועדת הבחירות המרכזית'}, n:0,
+    seats:{yashar:21,likud:27,together:12,democrats:8,yb:7,shas:6,utj:7,otzma:7,rz:6,jl:11,raam:8,hendel:0}
+  },
   kan: {
     label:{ru:'Кан 11', en:'Kan 11', he:'כאן 11'}, date:'23.10', by:{ru:'Kantar', en:'Kantar', he:'קנטאר'}, n:1106,
     seats:{yashar:22,likud:20,together:14,democrats:8,yb:8,shas:7,utj:8,otzma:8,rz:7,jl:9,raam:5,hendel:4}
@@ -415,7 +424,7 @@ var SOURCES = {
     seats:{yashar:23,likud:19,together:14,democrats:9,yb:8,shas:8,utj:7,otzma:8,rz:6,jl:8,raam:6,hendel:4}
   }
 };
-var ORDER = ['kan','ch12','ch13','ch14','ih','zman','maariv','i24','walla'];
+var ORDER = ['count','kan','ch12','ch13','ch14','ih','zman','maariv','i24','walla'];
 
 var CREDITS = [
   ['golan', 'Yair_Golan_(SHL_9404).jpg', 'Shlomi Amsalem', 'CC BY-SA 4.0'],
@@ -447,7 +456,9 @@ var T = {
     howTitle:'Как играть',
     how:'Перетащите партию в корзину, нажмите на неё (из корзины она уйдёт в «не распределены», оттуда вернётся обратно) или используйте стрелки ←, →, ↓. Побеждает корзина, в которой набралось 61 мандат из 120.',
     poolHow:'«Не распределены»: арабские партии и альянс Хенделя. В опросах их считают отдельно от двух блоков.',
-    srcTitle:'Источники', srcIntro:'Последний опрос каждого издания перед запретом на публикацию 23.10.',
+    srcTitle:'Источники', srcIntro:'Опросы: последний опрос каждого издания перед запретом на публикацию 23.10.',
+    countIntro:'Итоги: подсчёт ЦИК на 99% голосов, включая двойные конверты. Окончательные результаты ещё не объявлены.',
+    countLink:'ynet, обновления подсчёта, 29.10',
     wiki:'сводная таблица опросов (Википедия)', photosTitle:'Фото: Wikimedia Commons (обрезаны и уменьшены)', pd:'общественное достояние',
     stats:'Мы считаем анонимную статистику посещений (GoatCounter): без cookie и без личных данных.',
     asked:function(n){ return 'опрошено ' + n; },
@@ -469,7 +480,9 @@ var T = {
     howTitle:'How to play',
     how:'Drag a party into a bloc, or tap it: from a bloc it goes to “Unassigned”, and from there back again. Arrow keys ←, →, ↓ work too. A bloc wins with 61 of 120 seats.',
     poolHow:'“Unassigned”: the Arab parties and Hendel’s alliance. Polls count them separately from the two blocs.',
-    srcTitle:'Sources', srcIntro:'Each outlet’s last poll before the publication ban on 23.10.',
+    srcTitle:'Sources', srcIntro:'Polls: each outlet’s last poll before the publication ban on 23.10.',
+    countIntro:'Results: the Central Elections Committee count at 99% of votes, double envelopes included. Final results are not yet official.',
+    countLink:'ynet, live count updates, 29.10',
     wiki:'poll table (Wikipedia)', photosTitle:'Photos: Wikimedia Commons (cropped and resized)', pd:'public domain',
     stats:'We count anonymous visit statistics (GoatCounter): no cookies, no personal data.',
     asked:function(n){ return 'n = ' + n; },
@@ -491,7 +504,9 @@ var T = {
     howTitle:'איך משחקים',
     how:'גררו מפלגה לגוש, או הקישו עליה: מגוש היא עוברת ל"לא משויכים", ומשם חוזרת. אפשר גם בחצים ←, →, ↓. גוש מנצח עם 61 מתוך 120 מנדטים.',
     poolHow:'"לא משויכים": המפלגות הערביות והברית של הנדל. בסקרים הן נספרות בנפרד משני הגושים.',
-    srcTitle:'מקורות', srcIntro:'הסקר האחרון של כל כלי תקשורת לפני איסור הפרסום ב-23.10.',
+    srcTitle:'מקורות', srcIntro:'סקרים: הסקר האחרון של כל כלי תקשורת לפני איסור הפרסום ב-23.10.',
+    countIntro:'תוצאות: ספירת ועדת הבחירות המרכזית של 99% מהקולות, כולל המעטפות הכפולות. התוצאות הרשמיות טרם פורסמו.',
+    countLink:'ynet, עדכוני הספירה, 29.10',
     wiki:'טבלת הסקרים (ויקיפדיה)', photosTitle:'תמונות: ויקישיתוף (נחתכו והוקטנו)', pd:'נחלת הכלל',
     stats:'אנחנו סופרים סטטיסטיקת ביקורים אנונימית (GoatCounter): בלי עוגיות ובלי מידע אישי.',
     asked:function(n){ return n + ' נשאלים'; },
@@ -506,7 +521,7 @@ var T = {
 function t(k){ return T[lang][k]; }
 var ZK = {a:'blocA', b:'blocB', p:'pool'};
 
-var src = 'ch12';
+var src = 'count';
 var assign = {};
 function resetAssign(){ PARTIES.forEach(function(p){ assign[p.id] = p.def; }); }
 resetAssign();
